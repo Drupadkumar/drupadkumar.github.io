@@ -2,105 +2,168 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Drupad Muthyala </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drupad Muthyala | Data Analyst</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial; margin: 40px; line-height: 1.6; }
-        h1 { color: #333; }
-        a { color: blue; }
-        .section { margin-bottom: 30px; }
+        :root {
+            --primary: #003366;
+            --secondary: #007BFF;
+            --accent: #FFA500;
+            --light: #f8f9fa;
+            --dark: #242c34;
+            --text: #333;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            line-height: 1.6; 
+            color: var(--text);
+            background: linear-gradient(135deg, var(--light) 0%, #e9ecef 100%);
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; padding: 80px 0; text-align: center;
+            border-radius: 20px; margin-bottom: 50px; box-shadow: 0 20px 40px rgba(0,51,102,0.3);
+        }
+        .hero h1 { font-size: 3.5em; font-weight: 700; margin-bottom: 10px; }
+        .hero p { font-size: 1.4em; font-weight: 300; opacity: 0.95; }
+        .hero .btn { 
+            display: inline-block; padding: 15px 30px; background: var(--accent); 
+            color: var(--primary); text-decoration: none; border-radius: 50px; 
+            font-weight: 700; margin-top: 20px; transition: transform 0.3s;
+        }
+        .btn:hover { transform: translateY(-3px); }
+
+        /* Sections */
+        .section { margin-bottom: 60px; }
+        .section h2 { 
+            font-size: 2.5em; color: var(--primary); text-align: center; 
+            margin-bottom: 40px; position: relative;
+        }
+        .section h2::after { 
+            content: ''; display: block; width: 80px; height: 4px; 
+            background: var(--accent); margin: 10px auto; border-radius: 2px;
+        }
+
+        /* Skills Grid */
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .skill-card { 
+            background: white; padding: 30px; border-radius: 15px; 
+            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .skill-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,123,255,0.2); }
+        .skill-card h3 { color: var(--primary); margin-bottom: 15px; }
+
+        /* Projects */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .project-card { 
+            background: white; border-radius: 15px; overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;
+        }
+        .project-card:hover { transform: translateY(-10px); }
+        .project-card img { width: 100%; height: 200px; object-fit: cover; }
+        .project-info { padding: 25px; }
+        .project-info h3 { color: var(--primary); margin-bottom: 10px; }
+
+        /* Contact */
+        .contact { 
+            background: var(--primary); color: white; padding: 50px 0; 
+            border-radius: 20px; text-align: center;
+        }
+        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
+        .social-links a { color: white; font-size: 1.5em; transition: color 0.3s; }
+        .social-links a:hover { color: var(--accent); }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5em; }
+            .skills-grid, .projects-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
+    <div class="container">
+        <!-- Hero -->
+        <section class="hero">
+            <h1>Hi, I'm Drupad Muthyala</h1>
+            <p>Google Certified Data Analyst | IIIT-B Alumni | 4+ Years in BFSI Analytics</p>
+            <a href="#projects" class="btn">View My Projects</a>
+        </section>
 
-<h1>Hi, I'm Drupad Muthyala</h1>
-<p>Tech Professional | Business Analytics | Gen AI | Data Management | Visualization | Python | SQL | Power BI | Tableau | Google Certified Data Analyst | IIIT-B Alumni</p>
+        <!-- About -->
+        <section class="section" id="about">
+            <h2>About Me</h2>
+            <p style="text-align: center; font-size: 1.2em; max-width: 800px; margin: 0 auto;">
+                PG in Data Science from IIIT Bangalore with hands-on experience in AML/KYC, 
+                Fraud Detection, and Business Intelligence at ICICI Prudential & HDFC Bank. 
+                Skilled in Python, SQL, Power BI, and ML models (XGBoost).
+            </p>
+        </section>
 
-<div class="section">
-    <h2>About Me</h2>
-    <p>
-       I am a Google Certified Data Analyst and a PG in Data Science from IIIT Bangalore, with hands-on experience in data analytics, machine learning, and business intelligence. I bring 4+ years of domain expertise in Banking &amp; Insurance, specializing in AML/KYC, fraud detection, transaction monitoring, compliance analytics, and customer behavior insights.Recently, I completed a Data Analyst Traineeship at MedTourEasy, where I worked on the project “Predict Blood Donations”, gaining real-world exposure to analytical workflows, EDA, model development, and reporting under the guidance of a project mentor.I’m skilled in Python, SQL, Power BI, Excel, Pandas, NumPy, Scikit-learn, Matplotlib, and Seaborn, with experience building ML models (including XGBoost), conducting data cleaning and wrangling, and turning raw data into actionable insights.Across my roles at ICICI Prudential, HDFC Bank, and Eashan F&amp;B, I’ve leveraged analytics to solve operational challenges, detect anomalies, enhance compliance, improve performance, and support data-driven business decisions.I enjoy working on real-world datasets, exploring patterns, identifying risks, and creating meaningful dashboards that help teams make informed decisions. I’m now actively seeking opportunities in Data Analytics, Business Analytics, Fraud Analytics, or Risk Analytics, where I can apply my analytical expertise and BFSI domain knowledge to deliver measurable impact.Technical Skills: Python, SQL, Power BI, Excel, Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn, XGBoostCore Competencies: Fraud Detection, AML/KYC, Transaction Monitoring, Credit Risk Analysis, EDA, Feature Engineering, Data Visualization, ReportingTools: Git, JIRA, Confluence, MS Office.
-    </p>
-</div>
+        <!-- Skills -->
+        <section class="section" id="skills">
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>🛠️ Programming</h3>
+                    <p>Python, SQL, Pandas, NumPy, Scikit-learn, XGBoost</p>
+                </div>
+                <div class="skill-card">
+                    <h3>📊 Visualization</h3>
+                    <p>Power BI, Tableau, Matplotlib, Seaborn</p>
+                </div>
+                <div class="skill-card">
+                    <h3>🏦 Domain Expertise</h3>
+                    <p>AML/KYC, Fraud Detection, Transaction Monitoring, BFSI</p>
+                </div>
+                <div class="skill-card">
+                    <h3>⚙️ Tools</h3>
+                    <p>Git, JIRA, Excel, Advanced Data Wrangling</p>
+                </div>
+            </div>
+        </section>
 
-<div class="section">
-    <h2>Projects</h2>
-    <ul>
-        <li><a href="https://github.com/Drupadkumar/SQL_Music_Store_Analysis">Music Store Analysis (SQL Project)</a></li>
-        <li><a href="https://github.com/Drupadkumar/Credit-Card-Fraud-Detection-Analysis">Credit Card Fraud Detection (ML Project)</a></li>
-        <li><a href="https://github.com/Drupadkumar/RSVP-Movies">Movie Trends Analysis (SQL Project)</a></li>
-        <li><a href="https://github.com/Drupadkumar/Credit-EDA">Credit Risk Analysis (EDA Project)</a></li>
-    </ul>
-</div>
+        <!-- Projects -->
+        <section class="section" id="projects">
+            <h2>Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/350x200/007BFF/FFFFFF?text=Blood+Donations" alt="Predict Blood Donations">
+                    <div class="project-info">
+                        <h3>Predict Blood Donations</h3>
+                        <p>ML model using XGBoost for donation prediction - EDA, Feature Engineering & Dashboard</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/350x200/FFA500/FFFFFF?text=Fraud+Detection" alt="Fraud Detection">
+                    <div class="project-info">
+                        <h3>Fraud Detection Dashboard</h3>
+                        <p>Real-time transaction monitoring system with anomaly detection</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/350x200/003366/FFFFFF?text=Power+BI+Dashboard" alt="Power BI">
+                    <div class="project-info">
+                        <h3>Power BI Analytics</h3>
+                        <p>BFSI compliance & customer insights dashboards</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<div class="section">
-    <h2>Skills</h2>
-    <p>SQL, Data Wrangling, Data Visualization, Python, Power BI, Tableau, Advanced Excel, Data Science, Machine Learning, Pandas, NumPy, Scikit-learn</p>
-</div>
-
-<div class="section">
-    <h2>Contact</h2>
-    <p>Email: <a href="mailto:drupadkumar45@gmail.com">drupadkumar45@gmail.com</a></p>
-    <p>LinkedIn: <a href="https://www.linkedin.com/in/drupadkumar">linkedin.com/in/drupadkumar</a></p>
-    <p>GitHub: <a href="https://github.com/Drupadkumar">github.com/Drupadkumar</a></p>
-</div>
-
+        <!-- Contact -->
+        <section class="contact">
+            <h2>Let's Connect</h2>
+            <p>drupadkumar45@gmail.com</p>
+            <div class="social-links">
+                <a href="https://linkedin.com/in/drupadkumar">📘 LinkedIn</a>
+                <a href="https://github.com/Drupadkumar">💻 GitHub</a>
+            </div>
+        </section>
+    </div>
 </body>
-    <script>
-
-function getColumn(rows, colName) {
-    return rows.map(row => row[colName]);
-}
-
-// Load CSV Data
-Plotly.d3.csv("sales.csv", function(err, salesData) {
-    
-    // 1️⃣ KPI Card — Total Revenue
-    let totalSales = salesData.reduce((acc, row) => acc + Number(row.Sales), 0);
-    document.getElementById('kpiSection').innerHTML =
-        `<h2>Total Sales: $${totalSales.toLocaleString()}</h2>`;
-
-    // 2️⃣ Line Chart — Monthly Trends
-    let lineTrace = {
-        x: getColumn(salesData, "Month"),
-        y: getColumn(salesData, "Sales"),
-        type: "scatter",
-        mode: "lines+markers",
-    };
-
-    Plotly.newPlot("salesTrend", [lineTrace], { title: "Monthly Sales Trend" });
-
-});
-
-// Load Product Share CSV
-Plotly.d3.csv("products.csv", function(err, productData) {
-
-    let pieTrace = {
-        labels: getColumn(productData, "Product"),
-        values: getColumn(productData, "Sales"),
-        type: "pie"
-    };
-
-    Plotly.newPlot("productShare", [pieTrace], { title: "Product-wise Share" });
-
-});
-
-// Load Map Data
-Plotly.d3.csv("map.csv", function(err, mapData) {
-
-    let mapTrace = {
-        type: "choropleth",
-        locations: getColumn(mapData, "State"),
-        locationmode: "USA-states",
-        z: getColumn(mapData, "Sales"),
-        colorscale: "Reds",
-    };
-
-    Plotly.newPlot("regionMap", [mapTrace], {
-        title: "Regional Sales Map of USA"
-    });
-
-});
-
-</script>
-
 </html>
