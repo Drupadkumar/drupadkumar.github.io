@@ -97,9 +97,9 @@
 <div id="regionSales"   class="chart-box"></div>
 
 <script>
-// --- helpers ---
+// ---------- helpers ----------
 
-// numeric fields like "$6,000" -> 6000
+// numeric fields (already plain numbers in your latest CSV, but safe to clean) [file:14]
 function numberFromMoney(val) {
     if (!val) return 0;
     return Number(String(val).replace(/[^0-9.-]/g, ""));
@@ -114,10 +114,9 @@ function marginToDecimal(val) {
     return num / 100;
 }
 
-// dd-mm-yyyy or similar -> month short name
+// dd-mm-yyyy -> month short name
 function getMonthName(dateStr) {
     if (!dateStr) return "";
-    // Handle Excel-exported "14-01-2021" format from your Data.csv [file:12]
     const parts = String(dateStr).split("-");
     let d;
     if (parts.length === 3) {
@@ -136,8 +135,8 @@ function getMonthName(dateStr) {
 
 let rawData = [];
 
-// Your Data.csv has a dummy first column, then the real header row: [file:12]
-// ,Retailer,Retailer ID,Invoice Date,Region,State,City,Beverage Brand,Price per Unit,Units Sold,Total Sales,Operating Profit,Operating Margin,...
+// IMPORTANT: Data.csv must sit in the same folder as this HTML and have this header:
+// Retailer,Retailer ID,Invoice Date,Region,State,City,Beverage Brand,Price per Unit,Units Sold,Total Sales,Operating Profit,Operating Margin [file:14]
 Plotly.d3.csv("Data.csv", function(err, data) {
     if (err) {
         console.log("Error loading Data.csv", err);
@@ -148,19 +147,18 @@ Plotly.d3.csv("Data.csv", function(err, data) {
         return;
     }
 
-    // data already parsed with header names by Plotly.d3.csv
-    
+    // Map rows into a clean structure
     rawData = data.map(row => ({
-    Region: row["Region"],
-    State: row["State"],
-    Product: row["Beverage Brand"],
-    InvoiceDate: row["Invoice Date"],
-    Month: getMonthName(row["Invoice Date"]),
-    UnitsSold: numberFromMoney(row["Units Sold"]),
-    TotalSales: numberFromMoney(row["Total Sales"]),
-    OperatingProfit: numberFromMoney(row["Operating Profit"]),
-    OperatingMargin: marginToDecimal(row["Operating Margin"])            
-        }));
+        Region: row["Region"],
+        State: row["State"],
+        Product: row["Beverage Brand"],
+        InvoiceDate: row["Invoice Date"],
+        Month: getMonthName(row["Invoice Date"]),
+        UnitsSold: numberFromMoney(row["Units Sold"]),
+        TotalSales: numberFromMoney(row["Total Sales"]),
+        OperatingProfit: numberFromMoney(row["Operating Profit"]),
+        OperatingMargin: marginToDecimal(row["Operating Margin"])
+    }));
 
     initFilters();
     updateDashboard();
@@ -222,6 +220,7 @@ function getFilteredData() {
 function updateDashboard() {
     const data = getFilteredData();
 
+    // ---- KPIs ----
     const totalSales  = data.reduce((s,d) => s + d.TotalSales, 0);
     const totalUnits  = data.reduce((s,d) => s + d.UnitsSold, 0);
     const totalProfit = data.reduce((s,d) => s + d.OperatingProfit, 0);
@@ -230,76 +229,4 @@ function updateDashboard() {
         : 0;
 
     document.getElementById("kpiSales").innerHTML  = "Total Sales: $" + totalSales.toLocaleString();
-    document.getElementById("kpiUnits").innerHTML  = "Units Sold: " + totalUnits.toLocaleString();
-    document.getElementById("kpiProfit").innerHTML = "Operating Profit: $" + totalProfit.toLocaleString();
-    document.getElementById("kpiMargin").innerHTML = "Avg Operating Margin: " + (avgMargin * 100).toFixed(1) + "%";
-
-    // Monthly Total Sales
-    const monthOrder = ["Jan","Feb","Mar","Apr","May","Jun",
-                        "Jul","Aug","Sep","Oct","Nov","Dec"];
-    const monthMap = {};
-    data.forEach(d => {
-        if (!d.Month) return;
-        if (!monthMap[d.Month]) monthMap[d.Month] = 0;
-        monthMap[d.Month] += d.TotalSales;
-    });
-
-    const months = Object.keys(monthMap).sort(
-        (a,b) => monthOrder.indexOf(a) - monthOrder.indexOf(b)
-    );
-    const monthSales = months.map(m => monthMap[m]);
-
-    Plotly.newPlot("monthlyTrend", [{
-        x: months,
-        y: monthSales,
-        type: "scatter",
-        mode: "lines+markers",
-        line: { width: 3, color: "#e41a1c" }
-    }], {
-        title: "Sum of Total Sales by Month",
-        xaxis: { title: "Month" },
-        yaxis: { title: "Total Sales" }
-    });
-
-    // Product-wise Sales
-    const prodMap = {};
-    data.forEach(d => {
-        if (!prodMap[d.Product]) prodMap[d.Product] = 0;
-        prodMap[d.Product] += d.TotalSales;
-    });
-    const prodNames = Object.keys(prodMap);
-    const prodVals  = prodNames.map(p => prodMap[p]);
-
-    Plotly.newPlot("productShare", [{
-        labels: prodNames,
-        values: prodVals,
-        type: "pie",
-        hoverinfo: "label+percent+value",
-        textinfo: "label+percent"
-    }], {
-        title: "Product-wise Sales Share"
-    });
-
-    // Region-wise Total Sales
-    const regionMap = {};
-    data.forEach(d => {
-        if (!regionMap[d.Region]) regionMap[d.Region] = 0;
-        regionMap[d.Region] += d.TotalSales;
-    });
-    const regionNames = Object.keys(regionMap);
-    const regionVals  = regionNames.map(r => regionMap[r]);
-
-    Plotly.newPlot("regionSales", [{
-        x: regionNames,
-        y: regionVals,
-        type: "bar",
-        marker: { color: "#377eb8" }
-    }], {
-        title: "Total Sales by Region",
-        xaxis: { title: "Region" },
-        yaxis: { title: "Total Sales" }
-    });
-}
-</script>
-</body>
-</html>
+    document.getElementById("
