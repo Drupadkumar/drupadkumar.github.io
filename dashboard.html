@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Coca Cola Interactive Dashboard</title>
+    <meta charset="utf-8">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <style>
@@ -96,15 +97,37 @@
 <div id="regionSales"   class="chart-box"></div>
 
 <script>
-// Utility: parse Excel-like numeric strings (already clean in Data sheet, but safe)
-function toNumber(val) {
+// --- helpers ---
+
+// numeric fields like "$6,000" -> 6000
+function numberFromMoney(val) {
     if (!val) return 0;
     return Number(String(val).replace(/[^0-9.-]/g, ""));
 }
 
-// Utility: get month short name from date string
+// "50%" -> 0.5
+function marginToDecimal(val) {
+    if (!val) return 0;
+    const clean = String(val).replace("%", "");
+    const num = Number(clean);
+    if (isNaN(num)) return 0;
+    return num / 100;
+}
+
+// dd-mm-yyyy or similar -> month short name
 function getMonthName(dateStr) {
-    const d = new Date(dateStr);
+    if (!dateStr) return "";
+    // Handle Excel-exported "14-01-2021" format from your Data.csv [file:12]
+    const parts = String(dateStr).split("-");
+    let d;
+    if (parts.length === 3) {
+        const day   = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const year  = parseInt(parts[2], 10);
+        d = new Date(year, month, day);
+    } else {
+        d = new Date(dateStr);
+    }
     if (isNaN(d)) return "";
     const months = ["Jan","Feb","Mar","Apr","May","Jun",
                     "Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -113,31 +136,38 @@ function getMonthName(dateStr) {
 
 let rawData = [];
 
+// Your Data.csv has a dummy first column, then the real header row: [file:12]
+// ,Retailer,Retailer ID,Invoice Date,Region,State,City,Beverage Brand,Price per Unit,Units Sold,Total Sales,Operating Profit,Operating Margin,...
 Plotly.d3.csv("Data.csv", function(err, data) {
     if (err) {
         console.log("Error loading Data.csv", err);
+        document.body.insertAdjacentHTML(
+            "beforeend",
+            "<p style='color:red'>Could not load Data.csv from the same folder as dashboard.html.</p>"
+        );
         return;
     }
 
-    // Normalize data from Data sheet
-    rawData = data.map(row => ({
-        Region: row["Region"],
-        State: row["State"],
-        Product: row["Beverage Brand"],
-        InvoiceDate: row["Invoice Date"],
-        Month: getMonthName(row["Invoice Date"]),
-        UnitsSold: toNumber(row["Units Sold"]),
-        TotalSales: toNumber(row["Total Sales"]),
-        OperatingProfit: toNumber(row["Operating Profit"]),
-        OperatingMargin: Number(row["Operating Margin"])
-    }));
+    // data already parsed with header names by Plotly.d3.csv
+    rawData = data
+        .filter(row => row["Region"] && row["Beverage Brand"] && row["Invoice Date"])
+        .map(row => ({
+            Region: row["Region"],
+            State: row["State"],
+            Product: row["Beverage Brand"],
+            InvoiceDate: row["Invoice Date"],
+            Month: getMonthName(row["Invoice Date"]),
+            UnitsSold: numberFromMoney(row["Units Sold"]),
+            TotalSales: numberFromMoney(row["Total Sales"]),
+            OperatingProfit: numberFromMoney(row["Operating Profit"]),
+            OperatingMargin: marginToDecimal(row["Operating Margin"])
+        }));
 
     initFilters();
     updateDashboard();
     attachFilterEvents();
 });
 
-// Populate dropdowns from raw data
 function initFilters() {
     const regionSel  = document.getElementById("regionFilter");
     const productSel = document.getElementById("productFilter");
@@ -145,12 +175,10 @@ function initFilters() {
 
     const regions  = Array.from(new Set(rawData.map(d => d.Region))).sort();
     const products = Array.from(new Set(rawData.map(d => d.Product))).sort();
-    const months   = Array.from(new Set(rawData.map(d => d.Month))).filter(m => m).sort(
-        (a,b) => ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-            .indexOf(a) -
-            ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-            .indexOf(b)
-    );
+    const months   = Array.from(new Set(rawData.map(d => d.Month)))
+        .filter(m => m)
+        .sort((a,b) => ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(a)
+                     - ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(b));
 
     regions.forEach(r => {
         const opt = document.createElement("option");
@@ -174,14 +202,12 @@ function initFilters() {
     });
 }
 
-// Add change handlers
 function attachFilterEvents() {
     document.getElementById("regionFilter").addEventListener("change", updateDashboard);
     document.getElementById("productFilter").addEventListener("change", updateDashboard);
     document.getElementById("periodFilter").addEventListener("change", updateDashboard);
 }
 
-// Apply filters to raw data
 function getFilteredData() {
     const region  = document.getElementById("regionFilter").value;
     const product = document.getElementById("productFilter").value;
@@ -194,28 +220,22 @@ function getFilteredData() {
     );
 }
 
-// Recalculate everything on filter change
 function updateDashboard() {
     const data = getFilteredData();
 
-    // KPIs
-    const totalSales = data.reduce((s,d) => s + d.TotalSales, 0);
-    const totalUnits = data.reduce((s,d) => s + d.UnitsSold, 0);
+    const totalSales  = data.reduce((s,d) => s + d.TotalSales, 0);
+    const totalUnits  = data.reduce((s,d) => s + d.UnitsSold, 0);
     const totalProfit = data.reduce((s,d) => s + d.OperatingProfit, 0);
-    const avgMargin = data.length
+    const avgMargin   = data.length
         ? (data.reduce((s,d) => s + d.OperatingMargin, 0) / data.length)
         : 0;
 
-    document.getElementById("kpiSales").innerHTML =
-        "Total Sales: $" + totalSales.toLocaleString();
-    document.getElementById("kpiUnits").innerHTML =
-        "Units Sold: " + totalUnits.toLocaleString();
-    document.getElementById("kpiProfit").innerHTML =
-        "Operating Profit: $" + totalProfit.toLocaleString();
-    document.getElementById("kpiMargin").innerHTML =
-        "Avg Operating Margin: " + (avgMargin * 100).toFixed(1) + "%";
+    document.getElementById("kpiSales").innerHTML  = "Total Sales: $" + totalSales.toLocaleString();
+    document.getElementById("kpiUnits").innerHTML  = "Units Sold: " + totalUnits.toLocaleString();
+    document.getElementById("kpiProfit").innerHTML = "Operating Profit: $" + totalProfit.toLocaleString();
+    document.getElementById("kpiMargin").innerHTML = "Avg Operating Margin: " + (avgMargin * 100).toFixed(1) + "%";
 
-    // 1) Monthly Sales Trend (similar to pivot in Dashboard sheet) [file:4]
+    // Monthly Total Sales
     const monthOrder = ["Jan","Feb","Mar","Apr","May","Jun",
                         "Jul","Aug","Sep","Oct","Nov","Dec"];
     const monthMap = {};
@@ -224,6 +244,7 @@ function updateDashboard() {
         if (!monthMap[d.Month]) monthMap[d.Month] = 0;
         monthMap[d.Month] += d.TotalSales;
     });
+
     const months = Object.keys(monthMap).sort(
         (a,b) => monthOrder.indexOf(a) - monthOrder.indexOf(b)
     );
@@ -241,7 +262,7 @@ function updateDashboard() {
         yaxis: { title: "Total Sales" }
     });
 
-    // 2) Product-wise Sales Share (similar to product chart on Dashboard) [file:4]
+    // Product-wise Sales
     const prodMap = {};
     data.forEach(d => {
         if (!prodMap[d.Product]) prodMap[d.Product] = 0;
@@ -260,7 +281,7 @@ function updateDashboard() {
         title: "Product-wise Sales Share"
     });
 
-    // 3) Region-wise Total Sales bar (analogous to region/units pivot in Dashboard) [file:4]
+    // Region-wise Total Sales
     const regionMap = {};
     data.forEach(d => {
         if (!regionMap[d.Region]) regionMap[d.Region] = 0;
