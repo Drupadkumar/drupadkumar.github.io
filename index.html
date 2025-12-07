@@ -44,4 +44,62 @@
 </div>
 
 </body>
+    <script>
+
+function getColumn(rows, colName) {
+    return rows.map(row => row[colName]);
+}
+
+// Load CSV Data
+Plotly.d3.csv("sales.csv", function(err, salesData) {
+    
+    // 1️⃣ KPI Card — Total Revenue
+    let totalSales = salesData.reduce((acc, row) => acc + Number(row.Sales), 0);
+    document.getElementById('kpiSection').innerHTML =
+        `<h2>Total Sales: $${totalSales.toLocaleString()}</h2>`;
+
+    // 2️⃣ Line Chart — Monthly Trends
+    let lineTrace = {
+        x: getColumn(salesData, "Month"),
+        y: getColumn(salesData, "Sales"),
+        type: "scatter",
+        mode: "lines+markers",
+    };
+
+    Plotly.newPlot("salesTrend", [lineTrace], { title: "Monthly Sales Trend" });
+
+});
+
+// Load Product Share CSV
+Plotly.d3.csv("products.csv", function(err, productData) {
+
+    let pieTrace = {
+        labels: getColumn(productData, "Product"),
+        values: getColumn(productData, "Sales"),
+        type: "pie"
+    };
+
+    Plotly.newPlot("productShare", [pieTrace], { title: "Product-wise Share" });
+
+});
+
+// Load Map Data
+Plotly.d3.csv("map.csv", function(err, mapData) {
+
+    let mapTrace = {
+        type: "choropleth",
+        locations: getColumn(mapData, "State"),
+        locationmode: "USA-states",
+        z: getColumn(mapData, "Sales"),
+        colorscale: "Reds",
+    };
+
+    Plotly.newPlot("regionMap", [mapTrace], {
+        title: "Regional Sales Map of USA"
+    });
+
+});
+
+</script>
+
 </html>
