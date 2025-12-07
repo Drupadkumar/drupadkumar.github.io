@@ -15,22 +15,28 @@
             margin-bottom: 30px;
         }
 
-        .chart-box {
-            margin-top: 40px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        .layout-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .kpi-box {
             background: #ffffff;
             padding: 20px;
             border-radius: 10px;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-            width: 300px;
+            min-width: 260px;
+        }
+
+        .chart-box {
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -39,132 +45,133 @@
 
 <h1>Coca Cola Interactive Dashboard</h1>
 
-<div id="kpi1" class="kpi-box">Loading...</div>
+<div class="layout-row">
+    <div id="kpiTotalSales" class="kpi-box">Loading total sales...</div>
+</div>
 
 <div id="trendChart" class="chart-box"></div>
 <div id="productShare" class="chart-box"></div>
 <div id="regionSales" class="chart-box"></div>
 
 <script>
+// చిన్న utility – "₹/,$" మరియు "," ఉన్న నంబర్ ని clean చేసి number గా మార్చటం
+function toNumber(val) {
+    if (!val) return 0;
+    return Number(
+        String(val)
+            .replace(/[^0-9.-]/g, "")   // $ , etc తొలగించటం
+    );
+}
 
-// Load CocaColaData.csv → used for KPIs + Trend Chart
-Plotly.d3.csv("CocaColaData.csv", function(err, data){
-    if(err) { console.log("Error loading CocaColaData.csv"); return; }
+// 1️⃣ Period.csv → Monthly Trend + Total Sales KPI
+Plotly.d3.csv("Period.csv", function(err, data) {
+    if (err) {
+        console.log("Error loading Period.csv", err);
+        return;
+    }
 
-    // KPI: Total Sales
+    // Month, Sales columns మాత్రమే తీసుకోవాలి (Grand Total row ను skip చేస్తాం)
+    let months = [];
+    let salesVals = [];
     let totalSales = 0;
-    data.forEach(row => totalSales += Number(row.Sales));
 
-    document.getElementById("kpi1").innerHTML =
+    data.forEach(row => {
+        if (row.Month && row.Month.toLowerCase() !== "grand total") {
+            months.push(row.Month);
+            let s = toNumber(row.Sales);
+            salesVals.push(s);
+            totalSales += s;
+        }
+    });
+
+    // KPI – Total Sales
+    document.getElementById("kpiTotalSales").innerHTML =
         "Total Sales: $" + totalSales.toLocaleString();
 
-    // Line Chart: Monthly Sales Trend
-    let x_vals = data.map(row => row.Month);
-    let y_vals = data.map(row => Number(row.Sales));
-
-    let trace1 = {
-        x: x_vals,
-        y: y_vals,
+    // Line chart – Monthly Sales Trend
+    let traceTrend = {
+        x: months,
+        y: salesVals,
         type: "scatter",
         mode: "lines+markers",
-        line: { width: 3 }
+        line: { width: 3, color: "#e41a1c" },
+        marker: { size: 8 }
     };
 
-    let layout1 = { title: "Monthly Sales Trend" };
-
-    Plotly.newPlot("trendChart", [trace1], layout1);
-});
-
-
-// Load CocaColaDashboard.csv → used for Product Share Pie Chart
-Plotly.d3.csv("CocaColaDashboard.csv", function(err, data){
-    if(err) { console.log("Error loading CocaColaDashboard.csv"); return; }
-
-    let trace2 = {
-        labels: data.map(row => row.Product),
-        values: data.map(row => Number(row.Sales)),
-        type: "pie"
+    let layoutTrend = {
+        title: "Monthly Sales Trend",
+        xaxis: { title: "Month" },
+        yaxis: { title: "Sales" }
     };
 
-    let layout2 = { title: "Product-wise Sales Share" };
-
-    Plotly.newPlot("productShare", [trace2], layout2);
+    Plotly.newPlot("trendChart", [traceTrend], layoutTrend);
 });
 
+// 2️⃣ Product.csv → Product-wise Sales Pie Chart
+Plotly.d3.csv("Product.csv", function(err, data) {
+    if (err) {
+        console.log("Error loading Product.csv", err);
+        return;
+    }
 
-// Load CocaColaPivot.csv → used for Region Sales Bar Chart
-Plotly.d3.csv("CocaColaPivot.csv", function(err, data){
-    if(err) { console.log("Error loading CocaColaPivot.csv"); return; }
+    let labels = [];
+    let values = [];
 
-    let trace3 = {
-        x: data.map(row => row.Region),
-        y: data.map(row => Number(row.Sales)),
-        type: "bar"
+    data.forEach(row => {
+        if (row.Product && row.Product.toLowerCase() !== "grand total") {
+            labels.push(row.Product);
+            values.push(toNumber(row.Sales));
+        }
+    });
+
+    let tracePie = {
+        labels: labels,
+        values: values,
+        type: "pie",
+        hoverinfo: "label+percent+value",
+        textinfo: "label+percent"
     };
 
-    let layout3 = { title: "Regional Sales Comparison" };
+    let layoutPie = {
+        title: "Product-wise Sales Share"
+    };
 
-    Plotly.newPlot("regionSales", [trace3], layout3);
+    Plotly.newPlot("productShare", [tracePie], layoutPie);
 });
 
+// 3️⃣ Region.csv → Region-wise Sales Bar Chart
+Plotly.d3.csv("Region.csv", function(err, data) {
+    if (err) {
+        console.log("Error loading Region.csv", err);
+        return;
+    }
+
+    let regions = [];
+    let regionSales = [];
+
+    data.forEach(row => {
+        if (row.Region && row.Region.toLowerCase() !== "grand total") {
+            regions.push(row.Region);
+            regionSales.push(toNumber(row.Sales));
+        }
+    });
+
+    let traceBar = {
+        x: regions,
+        y: regionSales,
+        type: "bar",
+        marker: { color: "#377eb8" }
+    };
+
+    let layoutBar = {
+        title: "Regional Sales Comparison",
+        xaxis: { title: "Region" },
+        yaxis: { title: "Sales" }
+    };
+
+    Plotly.newPlot("regionSales", [traceBar], layoutBar);
+});
 </script>
 
 </body>
-    <script>
-
-function getColumn(rows, colName) {
-    return rows.map(row => row[colName]);
-}
-
-// Load CSV Data
-Plotly.d3.csv("sales.csv", function(err, salesData) {
-    
-    // 1️⃣ KPI Card — Total Revenue
-    let totalSales = salesData.reduce((acc, row) => acc + Number(row.Sales), 0);
-    document.getElementById('kpiSection').innerHTML =
-        `<h2>Total Sales: $${totalSales.toLocaleString()}</h2>`;
-
-    // 2️⃣ Line Chart — Monthly Trends
-    let lineTrace = {
-        x: getColumn(salesData, "Month"),
-        y: getColumn(salesData, "Sales"),
-        type: "scatter",
-        mode: "lines+markers",
-    };
-
-    Plotly.newPlot("salesTrend", [lineTrace], { title: "Monthly Sales Trend" });
-
-});
-
-// Load Product Share CSV
-Plotly.d3.csv("products.csv", function(err, productData) {
-
-    let pieTrace = {
-        labels: getColumn(productData, "Product"),
-        values: getColumn(productData, "Sales"),
-        type: "pie"
-    };
-
-    Plotly.newPlot("productShare", [pieTrace], { title: "Product-wise Share" });
-
-});
-
-// Load Map Data
-Plotly.d3.csv("map.csv", function(err, mapData) {
-
-    let mapTrace = {
-        type: "choropleth",
-        locations: getColumn(mapData, "State"),
-        locationmode: "USA-states",
-        z: getColumn(mapData, "Sales"),
-        colorscale: "Reds",
-    };
-
-    Plotly.newPlot("regionMap", [mapTrace], {
-        title: "Regional Sales Map of USA"
-    });
-
-});
-
-</script>
 </html>
