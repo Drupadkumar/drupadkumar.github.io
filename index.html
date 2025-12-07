@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drupad Muthyala | Data Analyst | Banking & Risk Analytics</title>
+    <title>Drupad Muthyala | Google Certified Data Analyst</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -12,105 +12,86 @@
             --secondary: #007BFF;
             --accent: #FFA500;
             --light: #f8f9fa;
-            --dark: #242c34;
             --text: #333;
-            --success: #28a745;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Roboto', sans-serif; 
-            line-height: 1.6; 
-            color: var(--text);
-            background: linear-gradient(135deg, var(--light) 0%, #e9ecef 100%);
+            line-height: 1.6; color: var(--text);
+            background: var(--light);
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
         
-        /* Hero Section */
+        /* Hero - LinkedIn Style */
         .hero {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white; padding: 100px 0; text-align: center;
-            border-radius: 20px; margin-bottom: 50px; box-shadow: 0 20px 40px rgba(0,51,102,0.3);
-            position: relative; overflow: hidden;
+            color: white; padding: 80px 0; text-align: center;
+            border-radius: 15px; margin-bottom: 60px; box-shadow: 0 15px 35px rgba(0,51,102,0.3);
         }
-        .hero::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        .hero h1 { font-size: 3.2em; font-weight: 700; margin-bottom: 15px; }
+        .hero .tagline { font-size: 1.3em; font-weight: 300; margin-bottom: 20px; }
+        .hero .cert-badge { 
+            background: var(--accent); color: var(--primary); padding: 10px 25px; 
+            border-radius: 30px; font-weight: 700; display: inline-block; margin: 20px 0;
         }
-        .hero-content { position: relative; z-index: 1; }
-        .hero h1 { font-size: 3.8em; font-weight: 700; margin-bottom: 15px; }
-        .hero .subtitle { font-size: 1.5em; font-weight: 300; margin-bottom: 20px; opacity: 0.95; }
-        .hero .certified { background: var(--accent); color: var(--primary); padding: 8px 20px; border-radius: 25px; font-weight: 700; display: inline-block; margin-bottom: 25px; }
-        .hero .btn { 
-            display: inline-block; padding: 15px 35px; background: var(--accent); 
-            color: var(--primary); text-decoration: none; border-radius: 50px; 
-            font-weight: 700; margin: 10px; transition: all 0.3s; box-shadow: 0 5px 15px rgba(255,165,0,0.4);
-        }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255,165,0,0.6); }
 
-        /* Sections */
-        .section { margin-bottom: 80px; }
+        /* LinkedIn Sections */
+        .section { margin-bottom: 70px; }
         .section h2 { 
-            font-size: 2.8em; color: var(--primary); text-align: center; 
-            margin-bottom: 50px; position: relative;
-        }
-        .section h2::after { 
-            content: ''; display: block; width: 100px; height: 5px; 
-            background: linear-gradient(90deg, var(--secondary), var(--accent)); 
-            margin: 15px auto; border-radius: 3px;
+            font-size: 2.4em; color: var(--primary); margin-bottom: 30px;
+            border-bottom: 3px solid var(--accent); padding-bottom: 10px; max-width: 400px;
         }
 
-        /* Skills Grid */
-        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .skill-card { 
-            background: white; padding: 35px 25px; border-radius: 20px; 
-            text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-            transition: all 0.4s; border: 1px solid #f0f0f0; position: relative; overflow: hidden;
+        /* Skills - Exact LinkedIn List */
+        .skills-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .skill-item { 
+            background: white; padding: 25px; border-radius: 12px; 
+            border-left: 4px solid var(--secondary); box-shadow: 0 8px 25px rgba(0,0,0,0.08);
         }
-        .skill-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 4px;
-            background: linear-gradient(90deg, var(--secondary), var(--accent)); transition: left 0.4s;
-        }
-        .skill-card:hover::before { left: 0; }
-        .skill-card:hover { transform: translateY(-12px); box-shadow: 0 25px 50px rgba(0,123,255,0.15); }
-        .skill-card i { font-size: 3em; color: var(--secondary); margin-bottom: 20px; }
-        .skill-card h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.4em; }
+        .skill-item h3 { color: var(--primary); margin-bottom: 12px; font-size: 1.3em; }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { background: var(--light); padding: 6px 14px; border-radius: 20px; font-size: 0.9em; color: var(--secondary); }
 
         /* Experience Timeline */
-        .timeline { position: relative; max-width: 900px; margin: 0 auto; }
-        .timeline::before { content: ''; position: absolute; left: 50%; width: 4px; height: 100%; background: var(--primary); transform: translateX(-50%); }
-        .timeline-item { margin-bottom: 60px; position: relative; }
-        .timeline-content { width: 45%; padding: 30px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .timeline { max-width: 900px; margin: 0 auto; position: relative; }
+        .timeline::before { content: ''; position: absolute; left: 50%; width: 3px; height: 100%; background: #e0e0e0; transform: translateX(-50%); }
+        .timeline-item { margin-bottom: 50px; position: relative; }
+        .timeline-badge { 
+            position: absolute; left: 50%; top: 20px; width: 16px; height: 16px; 
+            background: var(--accent); border-radius: 50%; transform: translateX(-50%);
+        }
+        .timeline-content { 
+            width: 48%; padding: 25px; background: white; border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
         .timeline-item:nth-child(odd) .timeline-content { margin-left: auto; }
         .timeline-item:nth-child(even) .timeline-content { margin-right: auto; }
-        .timeline-dot { position: absolute; left: 50%; top: 30px; width: 20px; height: 20px; background: var(--accent); border-radius: 50%; transform: translateX(-50%); box-shadow: 0 0 0 4px white; }
 
         /* Projects */
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 35px; }
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; }
         .project-card { 
-            background: white; border-radius: 20px; overflow: hidden; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08); transition: all 0.4s; border: 1px solid #f0f0f0;
+            background: white; border-radius: 12px; overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: transform 0.3s;
         }
-        .project-card:hover { transform: translateY(-15px); box-shadow: 0 30px 60px rgba(0,123,255,0.2); }
-        .project-image { height: 220px; background: linear-gradient(45deg, var(--secondary), var(--accent)); display: flex; align-items: center; justify-content: center; color: white; font-size: 4em; position: relative; }
-        .project-info { padding: 30px; }
-        .project-info h3 { color: var(--primary); margin-bottom: 12px; font-size: 1.5em; }
-        .project-tech { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-        .tech-tag { background: var(--light); padding: 5px 12px; border-radius: 20px; font-size: 0.85em; color: var(--secondary); }
+        .project-card:hover { transform: translateY(-8px); }
+        .project-header { 
+            background: linear-gradient(135deg, var(--secondary), var(--accent)); 
+            color: white; padding: 25px; text-align: center;
+        }
+        .project-body { padding: 25px; }
 
         /* Contact */
         .contact { 
-            background: linear-gradient(135deg, var(--primary), var(--dark)); color: white; padding: 60px 0; 
-            border-radius: 25px; text-align: center; margin-top: 50px;
+            background: var(--primary); color: white; padding: 50px 0; 
+            text-align: center; border-radius: 15px; margin-top: 50px;
         }
-        .social-links { display: flex; justify-content: center; gap: 25px; margin-top: 25px; flex-wrap: wrap; }
-        .social-links a { color: white; font-size: 1.8em; padding: 15px; border-radius: 50%; transition: all 0.3s; background: rgba(255,255,255,0.1); }
-        .social-links a:hover { color: var(--accent); transform: translateY(-5px); background: rgba(255,165,0,0.2); }
+        .social-links { display: flex; justify-content: center; gap: 30px; margin-top: 25px; }
+        .social-links a { color: white; font-size: 1.6em; padding: 15px; border-radius: 50%; transition: all 0.3s; }
+        .social-links a:hover { background: var(--accent); transform: translateY(-3px); }
 
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.8em; }
-            .timeline::before { left: 25px; }
-            .timeline-content { width: calc(100% - 70px); margin-left: 70px !important; }
-            .timeline-dot { left: 25px; }
+            .timeline::before, .timeline-badge { left: 20px; }
+            .timeline-content { width: calc(100% - 60px); margin-left: 60px !important; margin-right: 0 !important; }
         }
     </style>
 </head>
@@ -118,113 +99,109 @@
     <div class="container">
         <!-- Hero -->
         <section class="hero">
-            <div class="hero-content">
-                <h1>Drupad Muthyala</h1>
-                <p class="subtitle">Data Analyst | Banking & Risk Analytics | Hyderabad</p>
-                <span class="certified"><i class="fas fa-certificate"></i> Google Data Analytics Certified</span>
-                <br>
-                <a href="#skills" class="btn"><i class="fas fa-code"></i> Technical Skills</a>
-                <a href="#experience" class="btn"><i class="fas fa-briefcase"></i> Experience</a>
-                <a href="#projects" class="btn"><i class="fas fa-project-diagram"></i> Projects</a>
+            <h1>Drupad Muthyala</h1>
+            <p class="tagline">Tech Professional | Business Analytics | Gen AI | Data Management</p>
+            <div class="cert-badge">
+                <i class="fas fa-certificate"></i> Google Certified Data Analyst | IIIT-B Alumni
             </div>
         </section>
 
-        <!-- Skills -->
+        <!-- Skills - Exact from LinkedIn/Attachment -->
         <section class="section" id="skills">
-            <h2>Core Competencies</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <i class="fas fa-brain"></i>
-                    <h3>Machine Learning</h3>
-                    <p>Python, Scikit-learn, XGBoost, Pandas, NumPy<br>Feature Engineering & Model Development</p>
+            <h2>Technical Skills</h2>
+            <div class="skills-list">
+                <div class="skill-item">
+                    <h3><i class="fas fa-code"></i> Programming & ML</h3>
+                    <div class="skill-tags">
+                        <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Pandas</span>
+                        <span class="tag">NumPy</span><span class="tag">Scikit-learn</span><span class="tag">XGBoost</span>
+                    </div>
                 </div>
-                <div class="skill-card">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Data Visualization</h3>
-                    <p>Power BI, Tableau, Matplotlib, Seaborn<br>Interactive Dashboards & Reporting</p>
+                <div class="skill-item">
+                    <h3><i class="fas fa-chart-bar"></i> Visualization</h3>
+                    <div class="skill-tags">
+                        <span class="tag">Power BI</span><span class="tag">Tableau</span>
+                        <span class="tag">Matplotlib</span><span class="tag">Seaborn</span>
+                        <span class="tag">Advanced Excel</span>
+                    </div>
                 </div>
-                <div class="skill-card">
-                    <i class="fas fa-database"></i>
-                    <h3>Data Engineering</h3>
-                    <p>SQL, Data Wrangling, ETL Pipelines<br>Advanced Excel & Data Cleaning</p>
-                </div>
-                <div class="skill-card">
-                    <i class="fas fa-shield-alt"></i>
-                    <h3>BFSI Domain</h3>
-                    <p>AML/KYC, Fraud Detection, Risk Analytics<br>Transaction Monitoring & Compliance</p>
+                <div class="skill-item">
+                    <h3><i class="fas fa-tools"></i> Tools & Processes</h3>
+                    <div class="skill-tags">
+                        <span class="tag">Git</span><span class="tag">JIRA</span><span class="tag">Confluence</span>
+                        <span class="tag">Data Wrangling</span><span class="tag">EDA</span>
+                        <span class="tag">Feature Engineering</span>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Experience -->
+        <!-- Experience - LinkedIn Sequence -->
         <section class="section" id="experience">
             <h2>Professional Experience</h2>
             <div class="timeline">
                 <div class="timeline-item">
-                    <div class="timeline-dot"></div>
+                    <div class="timeline-badge"></div>
                     <div class="timeline-content">
                         <h3>Data Analyst Traineeship</h3>
-                        <p><strong>MedTourEasy</strong> | Predict Blood Donations Project</p>
-                        <p>EDA, ML Model Development (XGBoost), Dashboard Creation under mentorship</p>
+                        <p><strong>MedTourEasy</strong> | Recent</p>
+                        <p>"Predict Blood Donations" project - EDA, ML model development (XGBoost), reporting under mentorship</p>
                     </div>
                 </div>
                 <div class="timeline-item">
-                    <div class="timeline-dot"></div>
+                    <div class="timeline-badge"></div>
                     <div class="timeline-content">
-                        <h3>Analytics Specialist</h3>
-                        <p><strong>ICICI Prudential & HDFC Bank</strong> | 4+ Years BFSI</p>
-                        <p>AML/KYC, Fraud Detection, Transaction Monitoring, Compliance Analytics</p>
+                        <h3>Analytics Roles</h3>
+                        <p><strong>ICICI Prudential | HDFC Bank | Eashan F&B</strong> | 4+ Years</p>
+                        <p>AML/KYC, Fraud Detection, Transaction Monitoring, Compliance Analytics, Customer Behavior Insights</p>
                     </div>
                 </div>
                 <div class="timeline-item">
-                    <div class="timeline-dot"></div>
+                    <div class="timeline-badge"></div>
                     <div class="timeline-content">
-                        <h3>PG Data Science</h3>
-                        <p><strong>IIIT Bangalore</strong> | Advanced Analytics & ML</p>
-                        <p>Google Certified Data Analyst | Real-world project exposure</p>
+                        <h3>Education</h3>
+                        <p><strong>IIIT Bangalore</strong> | PG Data Science</p>
+                        <p>Google Certified Data Analyst</p>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Competencies -->
+        <section class="section" id="competencies">
+            <h2>Core Competencies</h2>
+            <div class="skills-list">
+                <div class="skill-item">
+                    <h3><i class="fas fa-shield-alt"></i> Fraud Detection & Compliance</h3>
+                    <p>AML/KYC, Transaction Monitoring, Anomaly Detection, Risk Analytics</p>
+                </div>
+                <div class="skill-item">
+                    <h3><i class="fas fa-chart-line"></i> Banking & Insurance Domain</h3>
+                    <p>4+ years BFSI experience - Credit Risk, Customer Insights, Operational Analytics</p>
                 </div>
             </div>
         </section>
 
         <!-- Projects -->
         <section class="section" id="projects">
-            <h2>Featured Projects</h2>
+            <h2>Key Projects</h2>
             <div class="projects-grid">
                 <div class="project-card">
-                    <div class="project-image"><i class="fas fa-tint"></i></div>
-                    <div class="project-info">
+                    <div class="project-header">
+                        <i class="fas fa-tint" style="font-size: 3em;"></i>
                         <h3>Predict Blood Donations</h3>
-                        <div class="project-tech">
-                            <span class="tech-tag">XGBoost</span>
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">Power BI</span>
-                        </div>
-                        <p>End-to-end ML pipeline: EDA → Feature Engineering → Model → Dashboard</p>
+                    </div>
+                    <div class="project-body">
+                        <p>End-to-end ML project: EDA → Feature Engineering → XGBoost Model → Power BI Dashboard</p>
                     </div>
                 </div>
                 <div class="project-card">
-                    <div class="project-image"><i class="fas fa-chart-pie"></i></div>
-                    <div class="project-info">
-                        <h3>Fraud Detection System</h3>
-                        <div class="project-tech">
-                            <span class="tech-tag">SQL</span>
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">Anomaly Detection</span>
-                        </div>
-                        <p>Real-time transaction monitoring with anomaly detection for BFSI compliance</p>
+                    <div class="project-header">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3em;"></i>
+                        <h3>Fraud Detection Systems</h3>
                     </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image"><i class="fas fa-vector-square"></i></div>
-                    <div class="project-info">
-                        <h3>BFSI Analytics Dashboard</h3>
-                        <div class="project-tech">
-                            <span class="tech-tag">Power BI</span>
-                            <span class="tech-tag">Tableau</span>
-                            <span class="tech-tag">Risk Analytics</span>
-                        </div>
-                        <p>Customer insights, credit risk analysis, operational performance dashboards</p>
+                    <div class="project-body">
+                        <p>Real-time transaction monitoring & anomaly detection for BFSI compliance</p>
                     </div>
                 </div>
             </div>
@@ -232,7 +209,7 @@
 
         <!-- Contact -->
         <section class="contact">
-            <h2>Let's Connect</h2>
+            <h2>Connect With Me</h2>
             <p><strong>drupadkumar45@gmail.com</strong></p>
             <div class="social-links">
                 <a href="https://linkedin.com/in/drupadkumar" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
