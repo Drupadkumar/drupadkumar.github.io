@@ -1,22 +1,113 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Coca Cola Dashboard</title>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <style>
-    body { font-family: Arial; margin: 20px; background: #f4f6f9; }
-    .chart-container { margin-bottom: 50px; }
-  </style>
+    <title>Coca Cola Interactive Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 20px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .chart-box {
+            margin-top: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+
+        .kpi-box {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+    </style>
 </head>
 
 <body>
 
 <h1>Coca Cola Interactive Dashboard</h1>
 
-<div id="kpiSection"></div>
-<div id="salesTrend" class="chart-container"></div>
-<div id="productShare" class="chart-container"></div>
-<div id="regionMap" class="chart-container"></div>
+<div id="kpi1" class="kpi-box">Loading...</div>
+
+<div id="trendChart" class="chart-box"></div>
+<div id="productShare" class="chart-box"></div>
+<div id="regionSales" class="chart-box"></div>
+
+<script>
+
+// Load CocaColaData.csv → used for KPIs + Trend Chart
+Plotly.d3.csv("CocaColaData.csv", function(err, data){
+    if(err) { console.log("Error loading CocaColaData.csv"); return; }
+
+    // KPI: Total Sales
+    let totalSales = 0;
+    data.forEach(row => totalSales += Number(row.Sales));
+
+    document.getElementById("kpi1").innerHTML =
+        "Total Sales: $" + totalSales.toLocaleString();
+
+    // Line Chart: Monthly Sales Trend
+    let x_vals = data.map(row => row.Month);
+    let y_vals = data.map(row => Number(row.Sales));
+
+    let trace1 = {
+        x: x_vals,
+        y: y_vals,
+        type: "scatter",
+        mode: "lines+markers",
+        line: { width: 3 }
+    };
+
+    let layout1 = { title: "Monthly Sales Trend" };
+
+    Plotly.newPlot("trendChart", [trace1], layout1);
+});
+
+
+// Load CocaColaDashboard.csv → used for Product Share Pie Chart
+Plotly.d3.csv("CocaColaDashboard.csv", function(err, data){
+    if(err) { console.log("Error loading CocaColaDashboard.csv"); return; }
+
+    let trace2 = {
+        labels: data.map(row => row.Product),
+        values: data.map(row => Number(row.Sales)),
+        type: "pie"
+    };
+
+    let layout2 = { title: "Product-wise Sales Share" };
+
+    Plotly.newPlot("productShare", [trace2], layout2);
+});
+
+
+// Load CocaColaPivot.csv → used for Region Sales Bar Chart
+Plotly.d3.csv("CocaColaPivot.csv", function(err, data){
+    if(err) { console.log("Error loading CocaColaPivot.csv"); return; }
+
+    let trace3 = {
+        x: data.map(row => row.Region),
+        y: data.map(row => Number(row.Sales)),
+        type: "bar"
+    };
+
+    let layout3 = { title: "Regional Sales Comparison" };
+
+    Plotly.newPlot("regionSales", [trace3], layout3);
+});
+
+</script>
 
 </body>
 </html>
