@@ -149,18 +149,17 @@ Plotly.d3.csv("Data.csv", function(err, data) {
     }
 
     // data already parsed with header names by Plotly.d3.csv
-    rawData = data
-        .filter(row => row["Region"] && row["Beverage Brand"] && row["Invoice Date"])
-        .map(row => ({
-            Region: row["Region"],
-            State: row["State"],
-            Product: row["Beverage Brand"],
-            InvoiceDate: row["Invoice Date"],
-            Month: getMonthName(row["Invoice Date"]),
-            UnitsSold: numberFromMoney(row["Units Sold"]),
-            TotalSales: numberFromMoney(row["Total Sales"]),
-            OperatingProfit: numberFromMoney(row["Operating Profit"]),
-            OperatingMargin: marginToDecimal(row["Operating Margin"])
+    
+    rawData = data.map(row => ({
+    Region: row["Region"],
+    State: row["State"],
+    Product: row["Beverage Brand"],
+    InvoiceDate: row["Invoice Date"],
+    Month: getMonthName(row["Invoice Date"]),
+    UnitsSold: numberFromMoney(row["Units Sold"]),
+    TotalSales: numberFromMoney(row["Total Sales"]),
+    OperatingProfit: numberFromMoney(row["Operating Profit"]),
+    OperatingMargin: marginToDecimal(row["Operating Margin"])            
         }));
 
     initFilters();
