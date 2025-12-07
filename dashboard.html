@@ -10,25 +10,44 @@
             background: #f4f6f9;
             margin: 20px;
         }
+        h1 { margin-bottom: 20px; }
 
-        h1 {
-            margin-bottom: 30px;
-        }
-
-        .layout-row {
+        .top-row {
             display: flex;
-            gap: 20px;
             flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
         .kpi-box {
             background: #ffffff;
-            padding: 20px;
+            padding: 16px 20px;
             border-radius: 10px;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-            min-width: 260px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.08);
+            min-width: 220px;
+        }
+
+        .filter-box {
+            background: #ffffff;
+            padding: 16px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        label {
+            font-size: 14px;
+            margin-right: 4px;
+        }
+
+        select {
+            padding: 4px 6px;
+            font-size: 14px;
         }
 
         .chart-box {
@@ -36,142 +55,231 @@
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.08);
         }
     </style>
 </head>
 
 <body>
-
 <h1>Coca Cola Interactive Dashboard</h1>
 
-<div class="layout-row">
-    <div id="kpiTotalSales" class="kpi-box">Loading total sales...</div>
+<div class="top-row">
+    <div class="filter-box">
+        <div>
+            <label for="regionFilter">Region:</label>
+            <select id="regionFilter">
+                <option value="All">All</option>
+            </select>
+        </div>
+        <div>
+            <label for="productFilter">Product:</label>
+            <select id="productFilter">
+                <option value="All">All</option>
+            </select>
+        </div>
+        <div>
+            <label for="periodFilter">Month:</label>
+            <select id="periodFilter">
+                <option value="All">All</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="kpiSales"  class="kpi-box">Total Sales: loading...</div>
+    <div id="kpiUnits"  class="kpi-box">Units Sold: loading...</div>
+    <div id="kpiProfit" class="kpi-box">Operating Profit: loading...</div>
+    <div id="kpiMargin" class="kpi-box">Avg Operating Margin: loading...</div>
 </div>
 
-<div id="trendChart" class="chart-box"></div>
-<div id="productShare" class="chart-box"></div>
-<div id="regionSales" class="chart-box"></div>
+<div id="monthlyTrend"  class="chart-box"></div>
+<div id="productShare"  class="chart-box"></div>
+<div id="regionSales"   class="chart-box"></div>
 
 <script>
-// చిన్న utility – "₹/,$" మరియు "," ఉన్న నంబర్ ని clean చేసి number గా మార్చటం
+// Utility: parse Excel-like numeric strings (already clean in Data sheet, but safe)
 function toNumber(val) {
     if (!val) return 0;
-    return Number(
-        String(val)
-            .replace(/[^0-9.-]/g, "")   // $ , etc తొలగించటం
+    return Number(String(val).replace(/[^0-9.-]/g, ""));
+}
+
+// Utility: get month short name from date string
+function getMonthName(dateStr) {
+    const d = new Date(dateStr);
+    if (isNaN(d)) return "";
+    const months = ["Jan","Feb","Mar","Apr","May","Jun",
+                    "Jul","Aug","Sep","Oct","Nov","Dec"];
+    return months[d.getMonth()];
+}
+
+let rawData = [];
+
+Plotly.d3.csv("Data.csv", function(err, data) {
+    if (err) {
+        console.log("Error loading Data.csv", err);
+        return;
+    }
+
+    // Normalize data from Data sheet
+    rawData = data.map(row => ({
+        Region: row["Region"],
+        State: row["State"],
+        Product: row["Beverage Brand"],
+        InvoiceDate: row["Invoice Date"],
+        Month: getMonthName(row["Invoice Date"]),
+        UnitsSold: toNumber(row["Units Sold"]),
+        TotalSales: toNumber(row["Total Sales"]),
+        OperatingProfit: toNumber(row["Operating Profit"]),
+        OperatingMargin: Number(row["Operating Margin"])
+    }));
+
+    initFilters();
+    updateDashboard();
+    attachFilterEvents();
+});
+
+// Populate dropdowns from raw data
+function initFilters() {
+    const regionSel  = document.getElementById("regionFilter");
+    const productSel = document.getElementById("productFilter");
+    const periodSel  = document.getElementById("periodFilter");
+
+    const regions  = Array.from(new Set(rawData.map(d => d.Region))).sort();
+    const products = Array.from(new Set(rawData.map(d => d.Product))).sort();
+    const months   = Array.from(new Set(rawData.map(d => d.Month))).filter(m => m).sort(
+        (a,b) => ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+            .indexOf(a) -
+            ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+            .indexOf(b)
+    );
+
+    regions.forEach(r => {
+        const opt = document.createElement("option");
+        opt.value = r;
+        opt.textContent = r;
+        regionSel.appendChild(opt);
+    });
+
+    products.forEach(p => {
+        const opt = document.createElement("option");
+        opt.value = p;
+        opt.textContent = p;
+        productSel.appendChild(opt);
+    });
+
+    months.forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.textContent = m;
+        periodSel.appendChild(opt);
+    });
+}
+
+// Add change handlers
+function attachFilterEvents() {
+    document.getElementById("regionFilter").addEventListener("change", updateDashboard);
+    document.getElementById("productFilter").addEventListener("change", updateDashboard);
+    document.getElementById("periodFilter").addEventListener("change", updateDashboard);
+}
+
+// Apply filters to raw data
+function getFilteredData() {
+    const region  = document.getElementById("regionFilter").value;
+    const product = document.getElementById("productFilter").value;
+    const period  = document.getElementById("periodFilter").value;
+
+    return rawData.filter(d =>
+        (region  === "All" || d.Region  === region) &&
+        (product === "All" || d.Product === product) &&
+        (period  === "All" || d.Month   === period)
     );
 }
 
-// 1️⃣ Period.csv → Monthly Trend + Total Sales KPI
-Plotly.d3.csv("Period.csv", function(err, data) {
-    if (err) {
-        console.log("Error loading Period.csv", err);
-        return;
-    }
+// Recalculate everything on filter change
+function updateDashboard() {
+    const data = getFilteredData();
 
-    // Month, Sales columns మాత్రమే తీసుకోవాలి (Grand Total row ను skip చేస్తాం)
-    let months = [];
-    let salesVals = [];
-    let totalSales = 0;
+    // KPIs
+    const totalSales = data.reduce((s,d) => s + d.TotalSales, 0);
+    const totalUnits = data.reduce((s,d) => s + d.UnitsSold, 0);
+    const totalProfit = data.reduce((s,d) => s + d.OperatingProfit, 0);
+    const avgMargin = data.length
+        ? (data.reduce((s,d) => s + d.OperatingMargin, 0) / data.length)
+        : 0;
 
-    data.forEach(row => {
-        if (row.Month && row.Month.toLowerCase() !== "grand total") {
-            months.push(row.Month);
-            let s = toNumber(row.Sales);
-            salesVals.push(s);
-            totalSales += s;
-        }
-    });
-
-    // KPI – Total Sales
-    document.getElementById("kpiTotalSales").innerHTML =
+    document.getElementById("kpiSales").innerHTML =
         "Total Sales: $" + totalSales.toLocaleString();
+    document.getElementById("kpiUnits").innerHTML =
+        "Units Sold: " + totalUnits.toLocaleString();
+    document.getElementById("kpiProfit").innerHTML =
+        "Operating Profit: $" + totalProfit.toLocaleString();
+    document.getElementById("kpiMargin").innerHTML =
+        "Avg Operating Margin: " + (avgMargin * 100).toFixed(1) + "%";
 
-    // Line chart – Monthly Sales Trend
-    let traceTrend = {
+    // 1) Monthly Sales Trend (similar to pivot in Dashboard sheet) [file:4]
+    const monthOrder = ["Jan","Feb","Mar","Apr","May","Jun",
+                        "Jul","Aug","Sep","Oct","Nov","Dec"];
+    const monthMap = {};
+    data.forEach(d => {
+        if (!d.Month) return;
+        if (!monthMap[d.Month]) monthMap[d.Month] = 0;
+        monthMap[d.Month] += d.TotalSales;
+    });
+    const months = Object.keys(monthMap).sort(
+        (a,b) => monthOrder.indexOf(a) - monthOrder.indexOf(b)
+    );
+    const monthSales = months.map(m => monthMap[m]);
+
+    Plotly.newPlot("monthlyTrend", [{
         x: months,
-        y: salesVals,
+        y: monthSales,
         type: "scatter",
         mode: "lines+markers",
-        line: { width: 3, color: "#e41a1c" },
-        marker: { size: 8 }
-    };
-
-    let layoutTrend = {
-        title: "Monthly Sales Trend",
+        line: { width: 3, color: "#e41a1c" }
+    }], {
+        title: "Sum of Total Sales by Month",
         xaxis: { title: "Month" },
-        yaxis: { title: "Sales" }
-    };
-
-    Plotly.newPlot("trendChart", [traceTrend], layoutTrend);
-});
-
-// 2️⃣ Product.csv → Product-wise Sales Pie Chart
-Plotly.d3.csv("Product.csv", function(err, data) {
-    if (err) {
-        console.log("Error loading Product.csv", err);
-        return;
-    }
-
-    let labels = [];
-    let values = [];
-
-    data.forEach(row => {
-        if (row.Product && row.Product.toLowerCase() !== "grand total") {
-            labels.push(row.Product);
-            values.push(toNumber(row.Sales));
-        }
+        yaxis: { title: "Total Sales" }
     });
 
-    let tracePie = {
-        labels: labels,
-        values: values,
+    // 2) Product-wise Sales Share (similar to product chart on Dashboard) [file:4]
+    const prodMap = {};
+    data.forEach(d => {
+        if (!prodMap[d.Product]) prodMap[d.Product] = 0;
+        prodMap[d.Product] += d.TotalSales;
+    });
+    const prodNames = Object.keys(prodMap);
+    const prodVals  = prodNames.map(p => prodMap[p]);
+
+    Plotly.newPlot("productShare", [{
+        labels: prodNames,
+        values: prodVals,
         type: "pie",
         hoverinfo: "label+percent+value",
         textinfo: "label+percent"
-    };
-
-    let layoutPie = {
+    }], {
         title: "Product-wise Sales Share"
-    };
-
-    Plotly.newPlot("productShare", [tracePie], layoutPie);
-});
-
-// 3️⃣ Region.csv → Region-wise Sales Bar Chart
-Plotly.d3.csv("Region.csv", function(err, data) {
-    if (err) {
-        console.log("Error loading Region.csv", err);
-        return;
-    }
-
-    let regions = [];
-    let regionSales = [];
-
-    data.forEach(row => {
-        if (row.Region && row.Region.toLowerCase() !== "grand total") {
-            regions.push(row.Region);
-            regionSales.push(toNumber(row.Sales));
-        }
     });
 
-    let traceBar = {
-        x: regions,
-        y: regionSales,
+    // 3) Region-wise Total Sales bar (analogous to region/units pivot in Dashboard) [file:4]
+    const regionMap = {};
+    data.forEach(d => {
+        if (!regionMap[d.Region]) regionMap[d.Region] = 0;
+        regionMap[d.Region] += d.TotalSales;
+    });
+    const regionNames = Object.keys(regionMap);
+    const regionVals  = regionNames.map(r => regionMap[r]);
+
+    Plotly.newPlot("regionSales", [{
+        x: regionNames,
+        y: regionVals,
         type: "bar",
         marker: { color: "#377eb8" }
-    };
-
-    let layoutBar = {
-        title: "Regional Sales Comparison",
+    }], {
+        title: "Total Sales by Region",
         xaxis: { title: "Region" },
-        yaxis: { title: "Sales" }
-    };
-
-    Plotly.newPlot("regionSales", [traceBar], layoutBar);
-});
+        yaxis: { title: "Total Sales" }
+    });
+}
 </script>
-
 </body>
 </html>
