@@ -67,6 +67,33 @@
         .timeline-item:nth-child(odd) .timeline-content { margin-left: auto; }
         .timeline-item:nth-child(even) .timeline-content { margin-right: auto; }
 
+        /* NEW: Interactive Dashboard Section */
+        .dashboard-section {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            padding: 60px 30px; border-radius: 20px; margin: 50px 0;
+            border: 1px solid rgba(0,123,255,0.1); box-shadow: 0 15px 40px rgba(0,123,255,0.08);
+        }
+        .dashboard-header {
+            text-align: center; margin-bottom: 40px;
+        }
+        .dashboard-header h2 { 
+            font-size: 2.6em; color: var(--primary); margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .dashboard-container {
+            max-width: 1000px; margin: 0 auto; position: relative;
+        }
+        .dashboard-placeholder {
+            background: white; border-radius: 15px; padding: 40px; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); min-height: 400px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .dashboard-placeholder i { font-size: 5em; color: var(--secondary); margin-bottom: 20px; opacity: 0.6; }
+        .dashboard-placeholder h3 { font-size: 1.8em; color: var(--primary); margin-bottom: 15px; }
+        .dashboard-placeholder p { color: #666; font-size: 1.1em; max-width: 500px; }
+        .embed-ready { background: var(--success); color: white; padding: 10px 20px; border-radius: 25px; margin-top: 20px; }
+
         /* Projects */
         .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; }
         .project-card { 
@@ -92,6 +119,7 @@
         @media (max-width: 768px) {
             .timeline::before, .timeline-badge { left: 20px; }
             .timeline-content { width: calc(100% - 60px); margin-left: 60px !important; margin-right: 0 !important; }
+            .dashboard-placeholder { min-height: 300px; padding: 30px 20px; }
         }
     </style>
 </head>
@@ -167,6 +195,25 @@
             </div>
         </section>
 
+        <!-- NEW: Interactive Dashboard Section -->
+        <section class="dashboard-section" id="dashboard">
+            <div class="dashboard-header">
+                <h2>Interactive Dashboard</h2>
+                <p style="font-size: 1.2em; color: #666; max-width: 600px; margin: 0 auto;">
+                    Real-time data analytics & business intelligence dashboards showcasing advanced visualization skills
+                </p>
+            </div>
+            <div class="dashboard-container">
+                <!-- PASTE YOUR EMBED CODE HERE -->
+                <div class="dashboard-placeholder" id="dashboard-embed">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Dashboard Loading...</h3>
+                    <p>Interactive dashboard will appear here. Paste your embed code in the <code>.dashboard-placeholder</code> div above.</p>
+                    <div class="embed-ready">✅ Ready for Embed Code</div>
+                </div>
+            </div>
+        </section>
+
         <!-- Core Competencies -->
         <section class="section" id="competencies">
             <h2>Core Competencies</h2>
@@ -178,31 +225,6 @@
                 <div class="skill-item">
                     <h3><i class="fas fa-chart-line"></i> Banking & Insurance Domain</h3>
                     <p>4+ years BFSI experience - Credit Risk, Customer Insights, Operational Analytics</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects -->
-        <section class="section" id="projects">
-            <h2>Key Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-header">
-                        <i class="fas fa-tint" style="font-size: 3em;"></i>
-                        <h3>Predict Blood Donations</h3>
-                    </div>
-                    <div class="project-body">
-                        <p>End-to-end ML project: EDA → Feature Engineering → XGBoost Model → Power BI Dashboard</p>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-header">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 3em;"></i>
-                        <h3>Fraud Detection Systems</h3>
-                    </div>
-                    <div class="project-body">
-                        <p>Real-time transaction monitoring & anomaly detection for BFSI compliance</p>
-                    </div>
                 </div>
             </div>
         </section>
