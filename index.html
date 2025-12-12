@@ -6,6 +6,7 @@
     <title>Drupad Muthyala | Google Certified Data Analyst</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
             --primary: #003366;
@@ -22,7 +23,7 @@
         }
         .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
         
-        /* Hero - LinkedIn Style */
+        /* Hero */
         .hero {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white; padding: 80px 0; text-align: center;
@@ -35,14 +36,14 @@
             border-radius: 30px; font-weight: 700; display: inline-block; margin: 20px 0;
         }
 
-        /* LinkedIn Sections */
+        /* Sections */
         .section { margin-bottom: 70px; }
         .section h2 { 
             font-size: 2.4em; color: var(--primary); margin-bottom: 30px;
             border-bottom: 3px solid var(--accent); padding-bottom: 10px; max-width: 400px;
         }
 
-        /* Skills - Exact LinkedIn List */
+        /* Skills */
         .skills-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
         .skill-item { 
             background: white; padding: 25px; border-radius: 12px; 
@@ -52,7 +53,7 @@
         .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
         .tag { background: var(--light); padding: 6px 14px; border-radius: 20px; font-size: 0.9em; color: var(--secondary); }
 
-        /* Experience Timeline */
+        /* Timeline */
         .timeline { max-width: 900px; margin: 0 auto; position: relative; }
         .timeline::before { content: ''; position: absolute; left: 50%; width: 3px; height: 100%; background: #e0e0e0; transform: translateX(-50%); }
         .timeline-item { margin-bottom: 50px; position: relative; }
@@ -67,7 +68,7 @@
         .timeline-item:nth-child(odd) .timeline-content { margin-left: auto; }
         .timeline-item:nth-child(even) .timeline-content { margin-right: auto; }
 
-        /* Interactive Dashboard Section - LIVE EMBED */
+        /* Dashboard Section */
         .dashboard-section {
             background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
             padding: 60px 30px; border-radius: 20px; margin: 50px 0;
@@ -96,9 +97,6 @@
         .feature-item { color: var(--secondary); }
         .feature-item i { font-size: 2em; margin-bottom: 10px; }
 
-        /* Core Competencies */
-        .competencies-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-
         /* Contact */
         .contact { 
             background: var(--primary); color: white; padding: 50px 0; 
@@ -115,8 +113,10 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
+
         <!-- Hero -->
         <section class="hero">
             <h1>Drupad Muthyala</h1>
@@ -126,7 +126,7 @@
             </div>
         </section>
 
-        <!-- Skills -->
+        <!-- Skills Section -->
         <section class="section" id="skills">
             <h2>Technical Skills</h2>
             <div class="skills-list">
@@ -156,7 +156,7 @@
             </div>
         </section>
 
-        <!-- Experience -->
+        <!-- Experience Section -->
         <section class="section" id="experience">
             <h2>Professional Experience</h2>
             <div class="timeline">
@@ -168,6 +168,7 @@
                         <p>"Predict Blood Donations" project - EDA, ML model development (XGBoost), reporting under mentorship</p>
                     </div>
                 </div>
+
                 <div class="timeline-item">
                     <div class="timeline-badge"></div>
                     <div class="timeline-content">
@@ -176,6 +177,7 @@
                         <p>AML/KYC, Fraud Detection, Transaction Monitoring, Compliance Analytics, Customer Behavior Insights</p>
                     </div>
                 </div>
+
                 <div class="timeline-item">
                     <div class="timeline-badge"></div>
                     <div class="timeline-content">
@@ -187,7 +189,9 @@
             </div>
         </section>
 
-        <!-- LIVE Interactive Dashboard -->
+
+
+        <!-- DASHBOARD 1 (Existing Excel Dashboard) -->
         <section class="dashboard-section" id="dashboard">
             <div class="dashboard-header">
                 <h2>Interactive Dashboard</h2>
@@ -195,6 +199,7 @@
                     Real-time Excel Business Intelligence Dashboard - showcasing advanced analytics & visualization skills
                 </p>
             </div>
+
             <div class="dashboard-container">
                 <iframe 
                     class="dashboard-embed"
@@ -202,8 +207,9 @@
                     height="600" 
                     frameborder="0" 
                     scrolling="no" 
-                    src="https://1drv.ms/x/c/1c756098e6e55f1b/IQQfhbklUTPGRrunuCNA7kllAb3CwquwqmKfy6ELWuVw5PE?em=2&wdAllowInteractivity=False&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True">
+                    src="https://1drv.ms/x/c/1c756098e6e55f1b/IQQfhbklUTPGRrunuCNA7kllAb3CwquwqmKfy6ELWuVw5PE?em=2&wdAllowInteractivity=False&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True">
                 </iframe>
+
                 <div class="dashboard-features">
                     <div class="feature-item">
                         <i class="fas fa-sync-alt"></i>
@@ -221,20 +227,44 @@
             </div>
         </section>
 
-        <!-- Core Competencies -->
-        <section class="section" id="competencies">
-            <h2>Core Competencies</h2>
-            <div class="competencies-grid">
-                <div class="skill-item">
-                    <h3><i class="fas fa-shield-alt"></i> Fraud Detection & Compliance</h3>
-                    <p>AML/KYC, Transaction Monitoring, Anomaly Detection, Risk Analytics</p>
-                </div>
-                <div class="skill-item">
-                    <h3><i class="fas fa-chart-line"></i> Banking & Insurance Domain</h3>
-                    <p>4+ years BFSI experience - Credit Risk, Customer Insights, Operational Analytics</p>
+
+
+        <!-- DASHBOARD 2 (New Power BI PPTX Viewer) -->
+        <section class="dashboard-section" id="dashboard2">
+            <div class="dashboard-header">
+                <h2>Power BI Dashboard</h2>
+                <p style="font-size: 1.2em; color: #666; max-width: 600px; margin: 0 auto;">
+                    Power BI Report (Published via OneDrive Viewer)
+                </p>
+            </div>
+
+            <div class="dashboard-container">
+                <iframe 
+                    class="dashboard-embed"
+                    src="https://view.officeapps.live.com/op/embed.aspx?src=https://1drv.ms/p/c/1c756098e6e55f1b/IQCDBzoZqtapSJx2BPeNQE8nAYDggL4iXz_PPjAKvho2Erc?e=68dKXw"
+                    width="100%"
+                    height="600"
+                    frameborder="0"
+                    scrolling="no">
+                </iframe>
+
+                <div class="dashboard-features">
+                    <div class="feature-item">
+                        <i class="fas fa-file-powerpoint"></i>
+                        <p>Power BI → PPTX Export</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-eye"></i>
+                        <p>Public Viewer</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-chart-line"></i>
+                        <p>Portfolio Ready</p>
+                    </div>
                 </div>
             </div>
         </section>
+
 
         <!-- Contact -->
         <section class="contact">
@@ -246,6 +276,7 @@
                 <a href="mailto:drupadkumar45@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
             </div>
         </section>
+
     </div>
 </body>
 </html>
