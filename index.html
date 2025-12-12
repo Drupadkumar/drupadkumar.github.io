@@ -4,9 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Drupad Muthyala — Data & BI Analyst</title>
-  <meta name="description" content="Drupad Muthyala — Business Analyst (Tech) & Data/BI Analyst. SQL, Power BI, Tableau, Python, Advanced Excel. Hyderabad, India." />
+  <meta name="description" content="Drupad Muthyala — Business Analyst (Tech) & Data/BI Analyst. SQL, Power BI, Tableau, Advanced Excel, Python. Hyderabad, India." />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
     :root{
       --bg:#f6f8fb; --card:#fff; --muted:#6b7280; --accent:#007bff; --primary:#003366; --accent2:#ff9f1c;
@@ -20,92 +21,90 @@
     .header p.lead{margin:0;color:rgba(255,255,255,0.92);font-weight:300}
     .badge{display:inline-block;margin-top:14px;background:var(--accent2);color:var(--primary);padding:8px 14px;border-radius:20px;font-weight:700}
     .contact-card{background:#fff;color:#111;padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(3,19,34,0.06);text-align:center}
-    .contact-card h3{margin:6px 0 10px;font-size:1.05rem}
-    .contact-card a{display:inline-block;margin:6px 6px;color:var(--primary);text-decoration:none}
     .top-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
     .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:700}
     .btn.secondary{background:#fff;color:var(--primary);border:1px solid rgba(0,0,0,0.06)}
     .two-col{display:grid;grid-template-columns:1fr 380px;gap:28px;margin-top:28px}
     section.card{background:var(--card);padding:22px;border-radius:12px;box-shadow:0 8px 24px rgba(3,19,34,0.06)}
     h2.section-title{font-size:1.3rem;margin:0 0 14px;color:var(--primary)}
-    .summary p{margin:0 0 8px;color:var(--muted)}
     .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:12px}
     .skill-pill{background:#f3f6fb;padding:8px 10px;border-radius:999px;font-weight:600;color:var(--primary);font-size:0.95rem;text-align:center}
     .competencies{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
     .competency{background:#f8fafc;padding:10px 12px;border-radius:10px;border-left:4px solid var(--accent);min-width:160px;font-weight:600;color:var(--primary)}
     .projects-list, .exp-list{display:flex;flex-direction:column;gap:14px}
-    .project, .exp-item{padding:14px;border-radius:10px;background:#fff;border:1px solid rgba(3,19,34,0.03);box-shadow:0 6px 18px rgba(3,19,34,0.03)}
-    .project h4, .exp-item h4{margin:0 0 6px;color:var(--primary)}
+    .timeline{display:flex;flex-direction:column;gap:18px}
+    .exp-item{padding:14px;border-radius:10px;background:#fff;border:1px solid rgba(3,19,34,0.03);box-shadow:0 6px 18px rgba(3,19,34,0.03)}
+    .exp-item h4{margin:0 0 6px;color:var(--primary)}
     .meta{font-size:0.92rem;color:var(--muted);margin-bottom:8px}
-    .bold{font-weight:700;color:#0f172a}
-    .timeline{display:flex;flex-direction:column;gap:12px}
     .certs{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .cert{background:#fff;padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.04);font-weight:600}
-    /* Dashboard styles */
-    .dashboards{display:grid;grid-template-columns:1fr;gap:22px;margin-top:18px}
     .dashboard-card{padding:16px;background:linear-gradient(180deg,#fff,#fbfdff);border-radius:12px;border:1px solid rgba(0,0,0,0.04)}
     .dashboard-embed{width:100%;height:620px;border-radius:10px;border:1px solid #e6eefb;overflow:hidden}
     .download-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}
-    footer{margin-top:28px;text-align:center;color:var(--muted);font-size:0.94rem}
-    /* responsive */
-    @media (max-width:980px){
+    footer{margin-top:28px;text-align:center;color:var(--muted);font-size:0.94rem;padding-bottom:20px}
+    .small-muted{color:var(--muted);font-size:0.95rem}
+    @media(max-width:980px){
       .header{grid-template-columns:1fr}
       .two-col{grid-template-columns:1fr}
       .dashboard-embed{height:520px}
-      .contact-card{order:-1}
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <!-- Header -->
+
+    <!-- HEADER -->
     <header class="header" role="banner" aria-label="Hero">
       <div>
         <h1>Drupad Muthyala</h1>
         <p class="lead">Business Analyst (Tech) • Data & BI Analyst — SQL · Power BI · Tableau · Advanced Excel · Python</p>
         <div class="badge"><i class="fas fa-certificate" style="margin-right:8px"></i>Google Certified Data Analyst</div>
 
+        <!-- UPDATED BUTTONS -->
         <div class="top-actions" style="margin-top:18px">
           <a class="btn" href="#contact">Contact / Hire</a>
           <a class="btn secondary" href="Drupad_Muthyala_Analyst_Resume.pdf" download>Download Resume (PDF)</a>
+          <a class="btn secondary" href="#dashboard">Dashboards</a> <!-- updated -->
+          <a class="btn secondary" href="https://github.com/Drupadkumar" target="_blank" rel="noopener">GitHub</a> <!-- added -->
           <a class="btn secondary" href="https://linkedin.com/in/drupadkumar" target="_blank" rel="noopener">LinkedIn</a>
-          <a class="btn secondary" href="https://drupadkumar.github.io" target="_blank" rel="noopener">Portfolio</a>
         </div>
 
-        <div style="margin-top:18px;font-size:0.95rem;color:var(--muted)">
+        <div style="margin-top:18px;color:var(--muted)">
           Hyderabad, India • Willing to relocate • Email: <strong>drupadkumar45@gmail.com</strong>
         </div>
       </div>
 
       <aside class="contact-card" aria-label="Contact card">
         <h3>Open to: Data Analyst / BI Analyst roles</h3>
-        <div style="font-size:0.95rem;color:var(--muted)">4+ years experience • BFSI & Product Analytics</div>
+        <div class="small-muted">4+ years experience • BFSI & Product Analytics</div>
         <div style="margin-top:12px">
           <a class="btn" href="mailto:drupadkumar45@gmail.com">Email Me</a>
         </div>
-        <div style="margin-top:12px;font-size:0.92rem;color:var(--muted)">
+        <div style="margin-top:12px;color:var(--muted)">
           Phone: <strong>+91 97000 14376</strong>
         </div>
       </aside>
     </header>
 
-    <!-- Two column top: summary + skills -->
+    <!-- TWO COLUMN TOP: SUMMARY + SKILLS -->
     <div class="two-col" style="margin-top:22px">
       <main>
-        <!-- Professional Summary -->
+
+        <!-- PROFESSIONAL SUMMARY -->
         <section class="card summary" aria-labelledby="summary-title">
           <h2 id="summary-title" class="section-title">Professional Summary</h2>
           <p>
             Google-certified Data & Business Analyst with 4+ years of cross-domain experience across banking, insurance and operations.
-            Experienced in translating business needs into scalable BI solutions using SQL, Power BI, Tableau, Advanced Excel and Python.
-            Strengths: dashboard & KPI design, data modelling, DAX, ETL, fraud analytics (AML/KYC), and stakeholder-driven insights.
+            Skilled in extracting insights and building production-ready dashboards using SQL, Power BI, Tableau, Advanced Excel and Python.
+            Proven track-record in fraud analytics (AML/KYC), KPI design, ETL processes, and stakeholder-driven reporting.
           </p>
           <p style="margin-top:8px;color:var(--muted)">
-            Seeking Data Analyst / Business Intelligence roles where I can drive data-driven decisions, automate reporting and build actionable dashboards.
+            Seeking Data Analyst, Business Analyst (Tech), and Business Intelligence roles where I can drive data-driven decisions, automate reporting and deliver scalable analytics solutions.
           </p>
         </section>
 
-        <!-- Core Competencies -->
+        <!-- CORE COMPETENCIES -->
         <section class="card" style="margin-top:18px" aria-labelledby="core-title">
           <h2 id="core-title" class="section-title">Core Competencies (Selected)</h2>
           <div class="competencies">
@@ -120,44 +119,43 @@
           </div>
         </section>
 
-        <!-- Projects (high-impact) -->
+        <!-- PROJECTS -->
         <section class="card" style="margin-top:18px" aria-labelledby="projects-title">
           <h2 id="projects-title" class="section-title">Selected Projects</h2>
           <div class="projects-list">
             <div class="project">
               <h4>Predict Blood Donations — Predictive Model</h4>
               <div class="meta">Tools: Python, Pandas, Scikit-learn, XGBoost, Matplotlib, Seaborn</div>
-              <p>Developed an end-to-end ML pipeline: EDA, feature engineering, model training (XGBoost) and evaluation to forecast donor behaviour. Delivered reproducible notebooks and model performance reports used for business insights.</p>
+              <p>Built an end-to-end ML pipeline including EDA, feature engineering and XGBoost-based modelling to forecast donor behaviour and produce business-ready performance reports.</p>
             </div>
 
             <div class="project">
               <h4>Credit Card Fraud Detection Model</h4>
               <div class="meta">Tools: Python, XGBoost, SMOTE</div>
-              <p>Built a fraud detection model on an imbalanced dataset using SMOTE and XGBoost. Implemented model validation and achieved high ROC-AUC, producing actionable risk scores for downstream monitoring.</p>
+              <p>Developed a fraud detection model for an imbalanced dataset using SMOTE and XGBoost with robust validation; produced risk scores for downstream monitoring.</p>
             </div>
 
             <div class="project">
               <h4>Music Store SQL Analysis</h4>
               <div class="meta">Tools: PostgreSQL / SQLite, SQL</div>
-              <p>Performed comprehensive SQL analysis to identify top customers, revenue drivers, and genre preferences. Generated insights to improve marketing focus and revenue optimization.</p>
+              <p>Performed SQL-based analysis to identify top customers, revenue drivers and genre insights enabling targeted marketing decisions.</p>
             </div>
 
             <div class="project">
               <h4>Loan Default Risk Analysis (EDA)</h4>
               <div class="meta">Tools: Python, Pandas, Matplotlib</div>
-              <p>Conducted deep exploratory analysis to surface financial and behavioural indicators of default — informed credit policy adjustments and segmentation strategies.</p>
+              <p>Conducted exploratory analysis to surface predictive indicators, informing credit assessment and segmentation strategies.</p>
             </div>
           </div>
         </section>
 
       </main>
 
-      <!-- Right column: Skills / Certifications / Quick stats -->
+      <!-- RIGHT COLUMN: SKILLS / CERTS / QUICK STATS -->
       <aside>
         <section class="card" aria-labelledby="skills-title">
           <h2 id="skills-title" class="section-title">Technical Skills (ATS Optimized)</h2>
           <div class="skills-grid" aria-hidden="false">
-            <!-- Top technical keywords visible for ATS -->
             <div class="skill-pill">SQL</div>
             <div class="skill-pill">Power BI</div>
             <div class="skill-pill">Tableau</div>
@@ -192,9 +190,9 @@
           <h2 id="quick-title" class="section-title">Key Impact Metrics</h2>
           <div style="margin-top:8px;color:var(--muted)">
             <ul style="padding-left:18px;margin:6px 0">
-              <li><strong>100% sales growth</strong> — drove sales growth with pricing & promotions (Eashan F&B)</li>
+              <li><strong>100% sales growth</strong> — pricing & promotions (Eashan F&B)</li>
               <li><strong>10% cost reduction</strong> — financial analysis & process improvements</li>
-              <li><strong>5% YoY customer base growth</strong> — segmentation & targeting (ICICI Prudential)</li>
+              <li><strong>5% YoY customer base growth</strong> — targeted segmentation (ICICI Prudential)</li>
               <li><strong>4+ years</strong> experience in BFSI analytics & reporting</li>
             </ul>
           </div>
@@ -202,31 +200,31 @@
       </aside>
     </div>
 
-    <!-- Experience (expanded) -->
+    <!-- EXPERIENCE -->
     <section class="card" style="margin-top:22px" aria-labelledby="exp-title">
       <h2 id="exp-title" class="section-title">Professional Experience</h2>
       <div class="timeline">
         <div class="exp-item">
-          <h4 class="bold">Data Analyst Trainee — MedTourEasy (Aug 2025)</h4>
+          <h4>Data Analyst Trainee — MedTourEasy (Aug 2025)</h4>
           <div class="meta">Hyderabad, India • Predictive modelling, end-to-end analytics</div>
           <ul style="margin:8px 0 0 18px;color:var(--muted)">
-            <li>Built “Predict Blood Donations” ML project: EDA, feature engineering, model evaluation (XGBoost).</li>
-            <li>Delivered model performance reports and visualizations; collaborated with mentors to productionize workflows.</li>
+            <li>Built “Predict Blood Donations”: EDA, feature engineering, model evaluation (XGBoost); delivered reproducible notebooks and reports.</li>
+            <li>Collaborated with cross-functional teams to document insights and suggest deployment-ready improvements.</li>
           </ul>
         </div>
 
         <div class="exp-item">
-          <h4 class="bold">Agency Manager — ICICI Prudential (Jul 2024 – Jun 2025)</h4>
+          <h4>Agency Manager — ICICI Prudential (Jul 2024 – Jun 2025)</h4>
           <div class="meta">Hyderabad, India • Transactional analytics, AML/KYC, compliance</div>
           <ul style="margin:8px 0 0 18px;color:var(--muted)">
-            <li>Analyzed transactional & customer data to detect anomalies and support compliance checks (AML/KYC, CDD).</li>
-            <li>Prepared dashboards & MIS reports; supported underwriting & operations to improve data accuracy.</li>
+            <li>Analyzed transactional & customer data to detect anomalies; supported AML/KYC and CDD workflows ensuring audit compliance.</li>
+            <li>Created dashboards and MIS reports; supported underwriting and operations to improve data accuracy and reduce manual effort.</li>
             <li>Used SQL & Excel to segment customers; contributed to a 5% YoY customer growth via targeted actions.</li>
           </ul>
         </div>
 
         <div class="exp-item">
-          <h4 class="bold">Business Lead — Eashan F&amp;B (Oct 2021 – Jul 2022)</h4>
+          <h4>Business Lead — Eashan F&amp;B (Oct 2021 – Jul 2022)</h4>
           <div class="meta">Hyderabad, India • Sales analytics & dashboarding</div>
           <ul style="margin:8px 0 0 18px;color:var(--muted)">
             <li>Built Power BI dashboards to track sales, inventory & promotions; implemented pricing experiments that led to 100% sales growth.</li>
@@ -235,7 +233,7 @@
         </div>
 
         <div class="exp-item">
-          <h4 class="bold">Sales Officer — HDFC Bank (Aug 2018 – Aug 2021)</h4>
+          <h4>Sales Officer — HDFC Bank (Aug 2018 – Aug 2021)</h4>
           <div class="meta">Hyderabad, India • Customer analytics, AML monitoring</div>
           <ul style="margin:8px 0 0 18px;color:var(--muted)">
             <li>Performed customer profiling and transaction analysis; built MIS reports and dashboards for branch performance tracking.</li>
@@ -245,26 +243,26 @@
       </div>
     </section>
 
-    <!-- Education -->
+    <!-- EDUCATION -->
     <section class="card" style="margin-top:18px" aria-labelledby="edu-title">
       <h2 id="edu-title" class="section-title">Education</h2>
       <div style="display:flex;flex-direction:column;gap:10px">
         <div>
-          <div class="bold">PG Programme in Data Science — IIIT Bangalore</div>
+          <div style="font-weight:700;color:var(--primary)">PG Programme in Data Science — IIIT Bangalore</div>
           <div class="meta">May 2024 – Jun 2025 • GPA: 3.64/4</div>
           <div style="color:var(--muted)">Coursework: Data Visualization, SQL, Machine Learning, Statistics, Business Intelligence</div>
         </div>
       </div>
     </section>
 
-    <!-- Dashboards (both) -->
-    <section style="margin-top:18px">
+    <!-- DASHBOARDS -->
+    <section id="dashboard" style="margin-top:18px">
       <h2 class="section-title">Interactive Dashboards</h2>
-      <div class="dashboards">
+      <div style="display:grid;gap:18px">
         <!-- Excel (interactive) -->
         <div class="dashboard-card">
           <h3 style="margin:0 0 8px;color:var(--primary)">Dashboard 1 — Interactive Excel</h3>
-          <p style="margin:0 0 12px;color:var(--muted)">Interactive Excel (OneDrive embed) — slicers & controls enabled for live exploration.</p>
+          <p class="small-muted" style="margin:0 0 12px">Interactive Excel (OneDrive embed) — slicers & controls enabled for live exploration.</p>
           <div class="dashboard-container">
             <iframe 
               class="dashboard-embed"
@@ -272,7 +270,7 @@
               frameborder="0" scrolling="no" title="Interactive Excel Dashboard — Drupad Muthyala">
             </iframe>
             <div class="download-row">
-              <a class="btn" href="Drupad_Muthyala_Analyst_Resume.pdf" download>Download Case Study / Resume</a>
+              <a class="btn" href="Drupad_Muthyala_Analyst_Resume.pdf" download>Download Resume</a>
               <a class="btn secondary" href="#contact">Request Access</a>
             </div>
           </div>
@@ -281,7 +279,7 @@
         <!-- Power BI (PDF) -->
         <div class="dashboard-card">
           <h3 style="margin:0 0 8px;color:var(--primary)">Dashboard 2 — Power BI (PDF)</h3>
-          <p style="margin:0 0 12px;color:var(--muted)">Exported Power BI slides embedded as PDF for portfolio viewing (public viewer).</p>
+          <p class="small-muted" style="margin:0 0 12px">Exported Power BI slides embedded as PDF for portfolio viewing (public viewer).</p>
           <div class="dashboard-container">
             <iframe 
               class="dashboard-embed"
@@ -297,20 +295,28 @@
       </div>
     </section>
 
-    <!-- Contact / CTA -->
+    <!-- CONTACT -->
     <section id="contact" class="card" style="margin-top:18px">
       <h2 class="section-title">Contact & Hire</h2>
-      <p style="color:var(--muted)">I'm actively seeking Data Analyst / Business Intelligence roles. Available for hybrid/onsite in Hyderabad and open to relocation.</p>
+      <p style="color:var(--muted)">
+        I'm actively seeking <strong>Data Analyst</strong>, <strong>Business Analyst (Tech)</strong>, and <strong>Business Intelligence</strong> roles.
+        Available for hybrid/onsite in Hyderabad and open to relocation.
+      </p>
+
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
         <a class="btn" href="mailto:drupadkumar45@gmail.com">Email: drupadkumar45@gmail.com</a>
         <a class="btn secondary" href="tel:+919700014376">Call: +91 97000 14376</a>
         <a class="btn secondary" href="Drupad_Muthyala_Analyst_Resume.pdf" download>Download Resume (PDF)</a>
       </div>
-      <div style="margin-top:12px;color:var(--muted)">LinkedIn: <a href="https://linkedin.com/in/drupadkumar" target="_blank" rel="noopener">linkedin.com/in/drupadkumar</a></div>
+
+      <div style="margin-top:12px;color:var(--muted)">
+        LinkedIn: <a href="https://linkedin.com/in/drupadkumar" target="_blank" rel="noopener">linkedin.com/in/drupadkumar</a>
+      </div>
     </section>
 
+    <!-- FOOTER -->
     <footer>
-      © Drupad Muthyala — Data & BI Analyst • Built for hiring managers • Last updated: Dec 2025
+      © Drupad Muthyala — Data & BI Analyst • Also applying for <strong>Business Analyst (Tech)</strong> roles • Built for hiring managers • Last updated: Dec 2025
     </footer>
 
   </div>
