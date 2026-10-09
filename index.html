@@ -1,1685 +1,475 @@
-<!DOCTYPE html>
-<html lang="en">
+from pathlib import Path
+import zipfile, textwrap, os
+
+out = Path("/mnt/data/drupad_portfolio_update")
+out.mkdir(exist_ok=True)
+
+html = r'''<!DOCTYPE html>
+<html lang="en-ZA">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-
-  <title>Drupad Kumar — Data Analyst | BI Analyst</title>
-
-  <meta
-    name="description"
-    content="Drupad Kumar — Data Analyst | BI Analyst | Power BI | SQL | Advanced Excel | MIS Reporting. Johannesburg, South Africa."
-  />
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-    rel="stylesheet"
-  >
-
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  >
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Drupad Kumar — Data Analyst and BI Analyst based in Johannesburg, South Africa. SQL, Power BI, Advanced Excel, Python, KPI reporting and business analytics.">
+  <meta name="theme-color" content="#10233f">
+  <title>Drupad Kumar | Data Analyst & BI Analyst</title>
   <style>
-    :root{
-      --bg:#f6f8fb;
-      --card:#fff;
-      --muted:#6b7280;
-      --accent:#007bff;
-      --primary:#003366;
-      --accent2:#ff9f1c;
-      --container:1100px;
+    :root {
+      --navy: #10233f;
+      --navy-2: #18385f;
+      --teal: #0e9488;
+      --teal-light: #dff7f2;
+      --ink: #182536;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --surface: #f7f9fc;
+      --white: #fff;
+      --radius: 20px;
+      --shadow: 0 12px 34px rgba(16, 35, 63, .08);
+      --max: 1120px;
     }
-
-    *{
-      box-sizing:border-box
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body { margin: 0; color: var(--ink); background: var(--white); font: 16px/1.65 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    a { color: inherit; }
+    .container { width: min(var(--max), calc(100% - 40px)); margin-inline: auto; }
+    .skip-link { position: absolute; left: -999px; top: 0; background: white; padding: 10px; z-index: 1000; }
+    .skip-link:focus { left: 10px; }
+    header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.94); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    .nav { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { text-decoration: none; color: var(--navy); font-weight: 800; letter-spacing: -.03em; }
+    .nav-links { display: flex; align-items: center; flex-wrap: wrap; gap: 22px; }
+    .nav-links a { text-decoration: none; color: #42536a; font-size: .92rem; font-weight: 650; }
+    .nav-links a:hover, .text-link:hover { color: var(--teal); }
+    .hero { background: radial-gradient(circle at 90% 10%, rgba(14,148,136,.18), transparent 32%), linear-gradient(135deg, #f5f9ff 0%, #fff 58%, #f0fbf8 100%); padding: 84px 0 64px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(260px, .8fr); gap: 44px; align-items: center; }
+    .eyebrow { color: var(--teal); text-transform: uppercase; letter-spacing: .13em; font-size: .76rem; font-weight: 800; }
+    h1 { color: var(--navy); font-size: clamp(2.6rem, 6vw, 4.7rem); line-height: 1.04; letter-spacing: -.055em; margin: 12px 0 14px; }
+    .hero h2 { color: var(--navy-2); font-size: clamp(1.2rem, 2.4vw, 1.65rem); line-height: 1.35; margin: 0 0 18px; font-weight: 700; }
+    .lead { color: #43536a; font-size: 1.08rem; max-width: 700px; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 9px; margin: 22px 0; }
+    .pill { border: 1px solid #d6e3ee; background: rgba(255,255,255,.8); border-radius: 999px; padding: 7px 12px; color: #30445c; font-size: .86rem; font-weight: 650; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .btn { display: inline-flex; justify-content: center; align-items: center; gap: 8px; border-radius: 11px; padding: 12px 18px; text-decoration: none; font-weight: 750; border: 1px solid transparent; transition: transform .15s ease, box-shadow .15s ease; }
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .btn-primary { background: var(--navy); color: white; }
+    .btn-secondary { border-color: #cbd8e5; color: var(--navy); background: white; }
+    .hero-card { background: white; border: 1px solid #e1e9f1; box-shadow: var(--shadow); border-radius: 24px; padding: 26px; }
+    .hero-card h3 { margin: 0 0 14px; color: var(--navy); font-size: 1.05rem; }
+    .hero-card ul { padding-left: 19px; margin: 0; color: #506176; }
+    .hero-card li { margin: 9px 0; }
+    section { padding: 72px 0; }
+    section.alt { background: var(--surface); }
+    .section-head { max-width: 760px; margin-bottom: 30px; }
+    .section-head h2 { color: var(--navy); font-size: clamp(1.8rem, 4vw, 2.55rem); line-height: 1.15; letter-spacing: -.035em; margin: 8px 0 12px; }
+    .section-head p { color: var(--muted); margin: 0; }
+    .impact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .impact-card { background: white; border: 1px solid var(--line); border-radius: 16px; padding: 20px; min-height: 145px; }
+    .impact-card .label { color: var(--teal); font-size: .76rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .impact-card h3 { color: var(--navy); margin: 8px 0 4px; font-size: 1.1rem; line-height: 1.3; }
+    .impact-card p { color: var(--muted); font-size: .9rem; margin: 0; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .panel { background: white; border: 1px solid var(--line); border-radius: var(--radius); padding: 25px; }
+    .panel h3 { color: var(--navy); margin: 0 0 12px; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { border: 1px solid #dce5ef; background: #f8fafc; color: #35465b; border-radius: 8px; padding: 6px 10px; font-size: .88rem; }
+    .target-copy { color: #4b5b70; margin-bottom: 18px; }
+    .employer-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .employer { background: var(--teal-light); color: #0b5d56; padding: 7px 11px; border-radius: 8px; font-weight: 700; font-size: .88rem; }
+    .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .project { display: flex; flex-direction: column; background: white; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; box-shadow: 0 5px 20px rgba(16,35,63,.035); }
+    .project-number { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: var(--teal-light); color: #0b7169; font-weight: 850; }
+    .project h3 { color: var(--navy); font-size: 1.18rem; line-height: 1.3; margin: 17px 0 8px; }
+    .project p { color: #59697d; margin: 0 0 15px; font-size: .94rem; }
+    .project .tools { color: var(--teal); font-size: .82rem; font-weight: 800; margin-top: auto; padding-top: 12px; }
+    .project-note { margin-top: 22px; border-left: 4px solid var(--teal); background: #eefbf8; padding: 16px 18px; border-radius: 0 12px 12px 0; color: #355b59; }
+    .dashboards { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .dashboard-card { background: white; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+    .dashboard-card h3 { color: var(--navy); margin: 0 0 8px; }
+    .dashboard-card p { color: var(--muted); margin: 0 0 16px; }
+    .small-link { color: var(--teal); font-weight: 800; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+    .timeline { display: grid; gap: 16px; }
+    .role { background: white; border: 1px solid var(--line); border-radius: 14px; padding: 21px 23px; }
+    .role-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+    .role h3 { margin: 0; color: var(--navy); font-size: 1.08rem; }
+    .role .date { color: var(--teal); font-size: .88rem; font-weight: 800; }
+    .role .place { color: var(--muted); font-size: .9rem; margin-top: 3px; }
+    .role ul { margin: 12px 0 0; padding-left: 20px; color: #536276; }
+    .role li { margin: 5px 0; }
+    .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .edu-card { background: white; border: 1px solid var(--line); border-radius: 14px; padding: 21px; }
+    .edu-card h3 { color: var(--navy); margin: 0 0 6px; font-size: 1.02rem; }
+    .edu-card p { color: var(--muted); margin: 0; font-size: .92rem; }
+    .contact-box { background: var(--navy); color: white; border-radius: 24px; padding: clamp(26px, 5vw, 46px); display: flex; justify-content: space-between; align-items: center; gap: 26px; }
+    .contact-box h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); margin: 0 0 8px; line-height: 1.15; }
+    .contact-box p { color: #d6e2ef; margin: 0; }
+    .contact-box .btn-primary { background: white; color: var(--navy); white-space: nowrap; }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 18px; }
+    .contact-links a { color: #d9fbf5; font-weight: 700; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+    footer { padding: 24px 0; color: var(--muted); font-size: .86rem; }
+    footer .container { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+    @media (max-width: 850px) {
+      .hero-grid, .two-col { grid-template-columns: 1fr; }
+      .impact-grid { grid-template-columns: repeat(2, 1fr); }
+      .project-grid { grid-template-columns: 1fr; }
+      .hero { padding-top: 60px; }
+      .hero-card { max-width: 600px; }
     }
-
-    body{
-      font-family:"Roboto",system-ui,Arial,sans-serif;
-      background:var(--bg);
-      color:#111;
-      margin:0;
-      line-height:1.5
+    @media (max-width: 600px) {
+      .container { width: min(100% - 28px, var(--max)); }
+      .nav { align-items: flex-start; padding: 14px 0; flex-direction: column; gap: 9px; }
+      .nav-links { gap: 12px; }
+      .nav-links a { font-size: .84rem; }
+      section { padding: 54px 0; }
+      .impact-grid, .dashboards, .edu-grid { grid-template-columns: 1fr; }
+      .impact-card { min-height: auto; }
+      .contact-box { align-items: flex-start; flex-direction: column; }
     }
-
-    .wrap{
-      max-width:var(--container);
-      margin:28px auto;
-      padding:22px
-    }
-
-    .header{
-      background:linear-gradient(135deg,var(--primary),var(--accent));
-      color:#fff;
-      padding:48px;
-      border-radius:14px;
-      box-shadow:0 10px 30px rgba(0,0,0,0.08);
-      display:grid;
-      grid-template-columns:1fr 320px;
-      gap:24px;
-      align-items:center
-    }
-
-    .header h1{
-      font-size:2.6rem;
-      margin:0 0 6px
-    }
-
-    .header p.lead{
-      margin:0;
-      color:rgba(255,255,255,0.92);
-      font-weight:300
-    }
-
-    .badge{
-      display:inline-block;
-      margin-top:14px;
-      background:var(--accent2);
-      color:var(--primary);
-      padding:8px 14px;
-      border-radius:20px;
-      font-weight:700
-    }
-
-    .contact-card{
-      background:#fff;
-      color:#111;
-      padding:18px;
-      border-radius:10px;
-      box-shadow:0 6px 18px rgba(3,19,34,0.06);
-      text-align:center
-    }
-
-    .top-actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:14px
-    }
-
-    .btn{
-      background:var(--accent);
-      color:#fff;
-      padding:10px 14px;
-      border-radius:8px;
-      text-decoration:none;
-      font-weight:700
-    }
-
-    .btn.secondary{
-      background:#fff;
-      color:var(--primary);
-      border:1px solid rgba(0,0,0,0.06)
-    }
-
-    .two-col{
-      display:grid;
-      grid-template-columns:1fr 380px;
-      gap:28px;
-      margin-top:28px
-    }
-
-    section.card{
-      background:var(--card);
-      padding:22px;
-      border-radius:12px;
-      box-shadow:0 8px 24px rgba(3,19,34,0.06)
-    }
-
-    h2.section-title{
-      font-size:1.3rem;
-      margin:0 0 14px;
-      color:var(--primary)
-    }
-
-    .skills-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-      gap:12px;
-      margin-top:12px
-    }
-
-    .skill-pill{
-      background:#f3f6fb;
-      padding:8px 10px;
-      border-radius:999px;
-      font-weight:600;
-      color:var(--primary);
-      font-size:0.95rem;
-      text-align:center
-    }
-
-    .competencies{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-top:12px
-    }
-
-    .competency{
-      background:#f8fafc;
-      padding:10px 12px;
-      border-radius:10px;
-      border-left:4px solid var(--accent);
-      min-width:160px;
-      font-weight:600;
-      color:var(--primary)
-    }
-
-    .projects-list,
-    .exp-list{
-      display:flex;
-      flex-direction:column;
-      gap:14px
-    }
-
-    .timeline{
-      display:flex;
-      flex-direction:column;
-      gap:18px
-    }
-
-    .exp-item{
-      padding:14px;
-      border-radius:10px;
-      background:#fff;
-      border:1px solid rgba(3,19,34,0.03);
-      box-shadow:0 6px 18px rgba(3,19,34,0.03)
-    }
-
-    .exp-item h4{
-      margin:0 0 6px;
-      color:var(--primary)
-    }
-
-    .meta{
-      font-size:0.92rem;
-      color:var(--muted);
-      margin-bottom:8px
-    }
-
-    .certs{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top:10px
-    }
-
-    .cert{
-      background:#fff;
-      padding:10px;
-      border-radius:8px;
-      border:1px solid rgba(0,0,0,0.04);
-      font-weight:600;
-      color:var(--primary);
-      font-size:0.92rem
-    }
-
-    .dashboard-card{
-      padding:16px;
-      background:linear-gradient(180deg,#fff,#fbfdff);
-      border-radius:12px;
-      border:1px solid rgba(0,0,0,0.04)
-    }
-
-    .dashboard-embed{
-      width:100%;
-      height:620px;
-      border-radius:10px;
-      border:1px solid #e6eefb;
-      overflow:hidden
-    }
-
-    .download-row{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      flex-wrap:wrap;
-      margin-top:12px
-    }
-
-    footer{
-      margin-top:28px;
-      text-align:center;
-      color:var(--muted);
-      font-size:0.94rem;
-      padding-bottom:20px
-    }
-
-    .small-muted{
-      color:var(--muted);
-      font-size:0.95rem
-    }
-
-    .project{
-      padding-bottom:8px
-    }
-
-    .project h4{
-      color:var(--primary);
-      margin-bottom:6px
-    }
-
-    .project p{
-      margin:7px 0;
-      color:#374151
-    }
-
-    @media(max-width:980px){
-
-      .header{
-        grid-template-columns:1fr
-      }
-
-      .two-col{
-        grid-template-columns:1fr
-      }
-
-      .dashboard-embed{
-        height:520px
-      }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
     }
   </style>
 </head>
-
 <body>
-
-<div class="wrap">
-
-  <!-- =========================================================
-       HEADER
-  ========================================================== -->
-
-  <header
-    class="header"
-    role="banner"
-    aria-label="Hero"
-  >
-
-    <div>
-
-      <h1>Drupad Kumar</h1>
-
-      <p class="lead">
-        Data Analyst / BI Analyst |
-        Google Certified Data Analytics Professional |
-        6+ Years Experience
-      </p>
-
-      <div class="badge">
-        <i
-          class="fas fa-certificate"
-          style="margin-right:8px"
-        ></i>
-
-        Google Data Analytics Professional Certificate
-      </div>
-
-
-      <!-- ACTIONS -->
-
-      <div
-        class="top-actions"
-        style="margin-top:18px"
-      >
-
-        <a
-          class="btn"
-          href="#contact"
-        >
-          Contact / Hire
-        </a>
-
-        <a
-          class="btn secondary"
-          href="Drupadkumar_Resume.pdf"
-          download
-        >
-          Download Resume
-        </a>
-
-        <a
-          class="btn secondary"
-          href="#dashboard"
-        >
-          Dashboards
-        </a>
-
-        <a
-          class="btn secondary"
-          href="https://github.com/Drupadkumar"
-          target="_blank"
-          rel="noopener"
-        >
-          GitHub
-        </a>
-
-        <a
-          class="btn secondary"
-          href="https://linkedin.com/in/drupadkumar"
-          target="_blank"
-          rel="noopener"
-        >
-          LinkedIn
-        </a>
-
-      </div>
-
-
-      <div
-        style="
-          margin-top:18px;
-          color:#ffffff;
-          font-weight:500
-        "
-      >
-
-        Johannesburg, South Africa • Critical Skills Work Visa •
-
-        Email:
-
-        <strong style="color:#fff">
-          drupadkumar45@gmail.com
-        </strong>
-
-      </div>
-
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#home">Drupad Kumar</a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#impact">Highlights</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
-
-
-    <!-- CONTACT CARD -->
-
-    <aside
-      class="contact-card"
-      aria-label="Contact card"
-    >
-
-      <h3>
-        Open to: Data Analyst / BI Analyst roles
-      </h3>
-
-      <div class="small-muted">
-        6+ years experience •
-        Banking, Insurance, Finance,
-        Technology & Business Operations
-      </div>
-
-      <div style="margin-top:12px">
-
-        <a
-          class="btn"
-          href="mailto:drupadkumar45@gmail.com"
-        >
-          Email Me
-        </a>
-
-      </div>
-
-      <div
-        style="
-          margin-top:12px;
-          color:var(--muted)
-        "
-      >
-
-        Phone:
-
-        <strong>
-          +27 72364 8584
-        </strong>
-
-      </div>
-
-    </aside>
-
   </header>
 
-
-  <!-- =========================================================
-       SUMMARY + SKILLS
-  ========================================================== -->
-
-  <div
-    class="two-col"
-    style="margin-top:22px"
-  >
-
-    <main>
-
-
-      <!-- PROFESSIONAL SUMMARY -->
-
-      <section
-        class="card summary"
-        aria-labelledby="summary-title"
-      >
-
-        <h2
-          id="summary-title"
-          class="section-title"
-        >
-          Professional Summary
-        </h2>
-
-        <p>
-
-          Data Analyst / BI Analyst with 6+ years of experience across
-          Data Analytics, Business Intelligence, MIS Reporting and
-          Management Reporting, with domain exposure across Banking,
-          Insurance, Finance, and Technology.
-
-          Strong hands-on experience in SQL, Power BI, Advanced Excel,
-          DAX and Power Query, with expertise in KPI analysis,
-          trend/variance analysis, data validation, reconciliation
-          and dashboard development.
-
-          Experienced in translating business requirements into
-          analytical reports, automating recurring reporting and
-          delivering data-driven insights to business stakeholders.
-
-        </p>
-
-      </section>
-
-
-      <!-- CORE COMPETENCIES -->
-
-      <section
-        class="card"
-        style="margin-top:18px"
-        aria-labelledby="core-title"
-      >
-
-        <h2
-          id="core-title"
-          class="section-title"
-        >
-          Core Competencies
-        </h2>
-
-        <div class="competencies">
-
-          <div class="competency">
-            Data Analysis
+  <main id="main">
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Data Analytics · Business Intelligence</div>
+          <h1>Drupad Kumar</h1>
+          <h2>Data Analyst / BI Analyst | Google Certified Data Analytics Professional</h2>
+          <p class="lead">I turn business data into reliable reporting, actionable insights and decision-ready dashboards. I bring experience across data analytics, business intelligence, MIS reporting and management reporting, using SQL, Power BI, Advanced Excel and Python to analyse performance, validate data and support business decisions.</p>
+          <div class="hero-meta">
+            <span class="pill">Johannesburg, South Africa</span>
+            <span class="pill">Valid South African Critical Skills Work Visa</span>
+            <span class="pill">Available to discuss opportunities now</span>
           </div>
-
-          <div class="competency">
-            Business Intelligence
+          <div class="actions">
+            <a class="btn btn-primary" href="#projects">Explore my projects <span aria-hidden="true">→</span></a>
+            <a class="btn btn-secondary" href="Drupadkumar_Resume.pdf" target="_blank" rel="noopener">Download resume ↗</a>
+            <a class="btn btn-secondary" href="https://www.linkedin.com/in/drupadkumar" target="_blank" rel="noopener">LinkedIn ↗</a>
           </div>
-
-          <div class="competency">
-            Dashboard Development
-          </div>
-
-          <div class="competency">
-            MIS Reporting
-          </div>
-
-          <div class="competency">
-            KPI & Trend Analysis
-          </div>
-
-          <div class="competency">
-            Variance Analysis
-          </div>
-
-          <div class="competency">
-            Data Validation & Reconciliation
-          </div>
-
-          <div class="competency">
-            Root Cause Analysis
-          </div>
-
-          <div class="competency">
-            Requirements Gathering
-          </div>
-
-          <div class="competency">
-            Stakeholder Management
-          </div>
-
-          <div class="competency">
-            Financial Reporting
-          </div>
-
-          <div class="competency">
-            Process Improvement
-          </div>
-
         </div>
-
-      </section>
-
-
-      <!-- KEY ANALYTICS PROJECTS -->
-
-      <section
-        class="card"
-        style="margin-top:18px"
-        aria-labelledby="projects-title"
-      >
-
-        <h2
-          id="projects-title"
-          class="section-title"
-        >
-          Key Analytics Projects
-        </h2>
-
-        <div class="projects-list">
-
-
-          <!-- PROJECT 1 -->
-
-          <div class="project">
-
-            <h4>
-              1. Sales & Business Performance Analysis
-            </h4>
-
-            <div class="meta">
-              Tools: SQL | Excel | Power BI | Data Analytics
-            </div>
-
-            <p>
-              <strong>Situation:</strong>
-              Sales data was spread across multiple sources, making it
-              difficult for management to monitor performance, identify
-              gaps and understand key business drivers.
-            </p>
-
-            <p>
-              <strong>Task:</strong>
-              Consolidate and analyse the sales data to give management
-              a clear view of performance, gaps and drivers.
-            </p>
-
-            <p>
-              <strong>Action:</strong>
-              Extracted, cleansed and validated the data using SQL and
-              Excel; performed KPI, trend, variance, segmentation and
-              period-over-period analysis; built Power BI visualisations
-              across regions, products and time periods.
-            </p>
-
-            <p>
-              <strong>Result:</strong>
-              Delivered a centralised view of sales performance that
-              enabled faster identification of trends and gaps,
-              supporting performance monitoring, resource allocation
-              and business decisions.
-            </p>
-
-          </div>
-
-
-          <!-- PROJECT 2 -->
-
-          <div class="project">
-
-            <h4>
-              2. Customer Analytics & Segmentation
-            </h4>
-
-            <div class="meta">
-              Tools: SQL | Excel | Power BI | Data Analysis
-            </div>
-
-            <p>
-              <strong>Situation:</strong>
-              Customer and transaction data was available but lacked
-              structured analysis of customer behaviour, segment
-              performance and revenue contribution.
-            </p>
-
-            <p>
-              <strong>Task:</strong>
-              Analyse customer behaviour and segment performance to
-              show which segments drive revenue.
-            </p>
-
-            <p>
-              <strong>Action:</strong>
-              Extracted and transformed customer and transaction data
-              using SQL; performed exploratory data analysis,
-              segmentation, trend analysis and revenue contribution
-              analysis; built a structured analytical view of segments,
-              purchasing behaviour and performance trends.
-            </p>
-
-            <p>
-              <strong>Result:</strong>
-              Enabled identification of high-value customer segments
-              and behavioural patterns, supporting targeted customer
-              strategies and data-driven decisions.
-            </p>
-
-          </div>
-
-
-          <!-- PROJECT 3 -->
-
-          <div class="project">
-
-            <h4>
-              3. Operational Performance Analysis
-            </h4>
-
-            <div class="meta">
-              Tools: SQL | Excel | Power BI | Data Analytics
-            </div>
-
-            <p>
-              <strong>Situation:</strong>
-              Operational teams relied on periodic reporting, limiting
-              visibility into productivity trends, performance gaps
-              and operational bottlenecks.
-            </p>
-
-            <p>
-              <strong>Task:</strong>
-              Give stakeholders clearer visibility into productivity,
-              workload and target achievement, and help them trace the
-              causes of performance deviations.
-            </p>
-
-            <p>
-              <strong>Action:</strong>
-              Analysed operational datasets using SQL and Excel,
-              performing KPI, trend, variance and root-cause analysis;
-              built Power BI visuals of productivity, workload,
-              target achievement and performance trends.
-            </p>
-
-            <p>
-              <strong>Result:</strong>
-              Helped stakeholders investigate deviations more efficiently
-              and identify bottlenecks and improvement opportunities,
-              supporting better resource allocation and process
-              optimisation.
-            </p>
-
-          </div>
-
-        </div>
-
-      </section>
-
-    </main>
-
-
-    <!-- =========================================================
-         RIGHT COLUMN
-    ========================================================== -->
-
-    <aside>
-
-
-      <!-- TECHNICAL SKILLS -->
-
-      <section
-        class="card"
-        aria-labelledby="skills-title"
-      >
-
-        <h2
-          id="skills-title"
-          class="section-title"
-        >
-          Technical Skills
-        </h2>
-
-        <div class="skills-grid">
-
-          <div class="skill-pill">
-            SQL
-          </div>
-
-          <div class="skill-pill">
-            Power BI
-          </div>
-
-          <div class="skill-pill">
-            Advanced Excel
-          </div>
-
-          <div class="skill-pill">
-            Python
-          </div>
-
-          <div class="skill-pill">
-            DAX
-          </div>
-
-          <div class="skill-pill">
-            Power Query
-          </div>
-
-          <div class="skill-pill">
-            Data Modeling
-          </div>
-
-          <div class="skill-pill">
-            PostgreSQL
-          </div>
-
-          <div class="skill-pill">
-            MySQL
-          </div>
-
-          <div class="skill-pill">
-            Data Visualization
-          </div>
-
-          <div class="skill-pill">
-            Pandas
-          </div>
-
-          <div class="skill-pill">
-            NumPy
-          </div>
-
-        </div>
-
-
-        <h2
-          class="section-title"
-          style="margin-top:20px"
-        >
-          Functional Skills
-        </h2>
-
-        <div
-          style="
-            margin-top:8px;
-            color:var(--muted);
-            font-size:0.95rem;
-            line-height:1.6;
-          "
-        >
-
-          Data Extraction · Data Cleansing · Data Validation ·
-          Data Reconciliation · Exploratory Data Analysis ·
-          Trend Analysis · Variance Analysis · Root Cause Analysis ·
-          Segmentation · KPI Analysis · Data Storytelling ·
-          Management Reporting · MIS Reporting · Financial Reporting ·
-          Financial Data Analysis · Requirements Gathering ·
-          Stakeholder Management · Cross-functional Collaboration ·
-          Process Improvement · Ad-hoc Analysis ·
-          Oracle Hyperion Planning · Hyperion Financial Reporting
-
-        </div>
-
-      </section>
-
-
-      <!-- CERTIFICATIONS -->
-
-      <section
-        class="card"
-        style="margin-top:18px"
-        aria-labelledby="certs-title"
-      >
-
-        <h2
-          id="certs-title"
-          class="section-title"
-        >
-          Certifications & Accomplishments
-        </h2>
-
-        <div class="certs">
-
-
-          <div class="cert">
-
-            <i
-              class="fas fa-certificate"
-              style="color:var(--accent);margin-right:6px"
-            ></i>
-
-            Google Data Analytics Professional Certificate
-            — Aug 2025
-
-          </div>
-
-
-          <div class="cert">
-
-            <i
-              class="fas fa-certificate"
-              style="color:var(--accent);margin-right:6px"
-            ></i>
-
-            SQL Certificate — HackerRank
-            — Jun 2025
-
-          </div>
-
-
-          <div class="cert">
-
-            <i
-              class="fas fa-certificate"
-              style="color:var(--accent);margin-right:6px"
-            ></i>
-
-            Python Certificate — HackerRank
-            — May 2025
-
-          </div>
-
-
-          <div class="cert">
-
-            <i
-              class="fas fa-certificate"
-              style="color:var(--accent);margin-right:6px"
-            ></i>
-
-            Deloitte Data Analytics & Visualization
-            Job Simulation — Forage
-            — Mar 2025
-
-          </div>
-
-
-          <div class="cert">
-
-            <i
-              class="fas fa-certificate"
-              style="color:var(--accent);margin-right:6px"
-            ></i>
-
-            Generative AI Certified
-            — UpGrad in collaboration with Microsoft
-            — May 2025
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- QUICK PROFILE -->
-
-      <section
-        class="card"
-        style="margin-top:18px"
-        aria-labelledby="quick-title"
-      >
-
-        <h2
-          id="quick-title"
-          class="section-title"
-        >
-          Key Profile Highlights
-        </h2>
-
-        <div
-          style="
-            margin-top:8px;
-            color:var(--muted)
-          "
-        >
-
-          <ul
-            style="
-              padding-left:18px;
-              margin:6px 0
-            "
-          >
-
-            <li>
-              <strong>6+ years</strong>
-              of professional experience
-            </li>
-
-            <li>
-              <strong>Power BI + SQL + Advanced Excel</strong>
-              focused analytics experience
-            </li>
-
-            <li>
-              <strong>Banking, Insurance, Finance & Technology</strong>
-              domain exposure
-            </li>
-
-            <li>
-              <strong>MIS & Management Reporting</strong>
-              experience
-            </li>
-
-            <li>
-              <strong>Oracle Hyperion Planning & HFR</strong>
-              reporting exposure
-            </li>
-
-            <li>
-              <strong>Critical Skills Work Visa</strong>
-              — South Africa
-            </li>
-
-            <li>
-              <strong>Data Analytics & Business Intelligence</strong>
-              specialization
-            </li>
-
+        <aside class="hero-card" aria-label="Professional focus">
+          <h3>What I bring</h3>
+          <ul>
+            <li>Business, financial and operational KPI reporting</li>
+            <li>Power BI dashboards, DAX measures and data modelling</li>
+            <li>SQL-based analysis, data validation and reconciliation</li>
+            <li>Recurring reporting workflows and management insights</li>
+            <li>Stakeholder communication and business-focused analysis</li>
           </ul>
-
-        </div>
-
-      </section>
-
-    </aside>
-
-  </div>
-
-
-  <!-- =========================================================
-       PROFESSIONAL EXPERIENCE
-  ========================================================== -->
-
-  <section
-    class="card"
-    style="margin-top:22px"
-    aria-labelledby="exp-title"
-  >
-
-    <h2
-      id="exp-title"
-      class="section-title"
-    >
-      Professional Experience
-    </h2>
-
-    <div class="timeline">
-
-
-      <!-- =====================================================
-           VISION 2 VISION
-      ====================================================== -->
-
-      <div class="exp-item">
-
-        <h4>
-          Data Analyst — Vision 2 Vision 
-          (Aug 2026 – Present)
-        </h4>
-
-        <div class="meta">
-          Johannesburg, South Africa •
-          MIS Reporting, Business Analytics & Power BI
-        </div>
-
-        <ul
-          style="
-            margin:8px 0 0 18px;
-            color:var(--muted)
-          "
-        >
-
-          <li>
-            Deliver daily, weekly and monthly MIS reports covering
-            business, financial and operational performance for management.
-          </li>
-
-          <li>
-            Track KPIs, revenue, targets and variances, highlighting
-            gaps and trends for management action.
-          </li>
-
-          <li>
-            Maintain Excel reports and management trackers used in
-            periodic business reviews.
-          </li>
-
-          <li>
-            Prepare and validate data from multiple sources to feed
-            Power BI dashboards.
-          </li>
-
-          <li>
-            Reconcile data and perform variance analysis to keep
-            management reports accurate and consistent.
-          </li>
-
-        </ul>
-
+        </aside>
       </div>
+    </section>
 
-
-      <!-- =====================================================
-           ZYNLOGIC
-      ====================================================== -->
-
-      <div class="exp-item">
-
-        <h4>
-          Data Analyst — Zynlogic Technologies
-          (Jun 2025 – Jul 2026)
-        </h4>
-
-        <div class="meta">
-          Hyderabad, India •
-          Business Analytics, Power BI, SQL & Python
+    <section id="impact">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Professional highlights</div>
+          <h2>Analytics focused on business outcomes</h2>
+          <p>A concise view of my experience, core capabilities and South African job-market focus—without unverified project or automation counts.</p>
         </div>
-
-        <ul
-          style="
-            margin:8px 0 0 18px;
-            color:var(--muted)
-          "
-        >
-
-          <li>
-            Developed and maintained Power BI dashboards and reports
-            for management and business stakeholders.
-          </li>
-
-          <li>
-            Defined KPIs and DAX measures with interactive visuals
-            to monitor business performance.
-          </li>
-
-          <li>
-            Cleaned and validated data from multiple sources to ensure
-            accurate and consistent reporting.
-          </li>
-
-          <li>
-            Analysed trends, patterns and performance gaps to identify
-            improvement opportunities.
-          </li>
-
-          <li>
-            Presented findings and recommendations to stakeholders to
-            support data-driven decisions.
-          </li>
-
-          <li>
-            Used Excel for reconciliation, ad-hoc reporting and
-            investigation of business metrics.
-          </li>
-
-          <li>
-            Worked with cross-functional teams to gather requirements
-            and deliver relevant analytical reports.
-          </li>
-
-          <li>
-            Used Python (Pandas) to clean data, identifying missing,
-            null and duplicate values before analysis and reporting.
-          </li>
-
-        </ul>
-
+        <div class="impact-grid">
+          <article class="impact-card">
+            <div class="label">Experience</div>
+            <h3>6+ years</h3>
+            <p>Across analytics, reporting and business roles.</p>
+          </article>
+          <article class="impact-card">
+            <div class="label">Business intelligence</div>
+            <h3>Dashboards & KPI reporting</h3>
+            <p>Performance tracking, trends and management reporting.</p>
+          </article>
+          <article class="impact-card">
+            <div class="label">Reporting efficiency</div>
+            <h3>Workflow improvement</h3>
+            <p>SQL, Excel and Power Query-supported reporting processes.</p>
+          </article>
+          <article class="impact-card">
+            <div class="label">Location & availability</div>
+            <h3>Johannesburg, South Africa</h3>
+            <p>Available to discuss relevant opportunities now.</p>
+          </article>
+        </div>
       </div>
+    </section>
 
-
-      <!-- =====================================================
-           ICICI PRUDENTIAL
-      ====================================================== -->
-
-      <div class="exp-item">
-
-        <h4>
-          BI Analyst — ICICI Prudential
-          (Jul 2024 – Jun 2025)
-        </h4>
-
-        <div class="meta">
-          Hyderabad, India •
-          Insurance | Business Intelligence | Power BI & Reporting
+    <section class="alt" id="south-africa">
+      <div class="container two-col">
+        <div class="panel">
+          <div class="eyebrow">Local market focus</div>
+          <h3>South Africa | Data Analytics & BI</h3>
+          <p class="target-copy">I am seeking Data Analyst and BI Analyst opportunities across banking, insurance, financial services and technology. My focus includes management reporting, financial and operational KPIs, variance analysis, reconciliation, customer analytics and reporting improvement.</p>
+          <p class="target-copy">I recognise the importance of data quality, auditability, privacy-aware handling of information and dependable reporting in regulated financial-services environments.</p>
+          <p><strong>Work authorisation:</strong> Valid South African Critical Skills Work Visa.</p>
+          <p><strong>Availability:</strong> Available to discuss opportunities now.</p>
         </div>
-
-        <ul
-          style="
-            margin:8px 0 0 18px;
-            color:var(--muted)
-          "
-        >
-
-          <li>
-            Developed interactive Power BI dashboards giving visibility
-            into business and operational KPIs.
-          </li>
-
-          <li>
-            Imported, transformed and modelled data from multiple sources;
-            built relationships and DAX measures for KPIs and analytical views.
-          </li>
-
-          <li>
-            Converted existing Excel/MIS reports into interactive Power BI
-            dashboards, improving reporting efficiency and reducing
-            manual effort.
-          </li>
-
-          <li>
-            Reconciled data between source systems, Excel reports and
-            Power BI dashboards.
-          </li>
-
-          <li>
-            Maintained and enhanced reports as business requirements changed.
-          </li>
-
-        </ul>
-
-      </div>
-
-
-      <!-- =====================================================
-           EASHAN F&B
-      ====================================================== -->
-
-      <div class="exp-item">
-
-        <h4>
-          Reporting Analyst — Eashan F&amp;B
-          (Feb 2023 – Jul 2024)
-        </h4>
-
-        <div class="meta">
-          Hyderabad, India •
-          Reporting, Finance, Business Analytics & Operations
-        </div>
-
-        <ul
-          style="
-            margin:8px 0 0 18px;
-            color:var(--muted)
-          "
-        >
-
-          <li>
-            Analysed financial and operational data to deliver actionable
-            insights to management and functional teams.
-          </li>
-
-          <li>
-            Prepared recurring and ad-hoc finance and MIS reports covering
-            business performance, KPIs, productivity and operational metrics.
-          </li>
-
-          <li>
-            Supported finance reporting on Oracle Hyperion Planning by
-            running scheduled daily, weekly and monthly data loads and
-            validating the loaded data.
-          </li>
-
-          <li>
-            Generated Hyperion Financial Reporting (HFR) reports and
-            handled ad-hoc finance user requests.
-          </li>
-
-          <li>
-            Built Excel-based dashboards and analytical reports tracking
-            performance against business targets.
-          </li>
-
-          <li>
-            Performed data cleaning, validation, reconciliation and
-            root-cause analysis to improve reporting accuracy.
-          </li>
-
-          <li>
-            Resolved data discrepancies and reporting issues with
-            cross-functional teams, supporting management with insights
-            for planning and performance monitoring.
-          </li>
-
-        </ul>
-
-      </div>
-
-
-      <!-- =====================================================
-           CAREER BREAK
-      ====================================================== -->
-
-      <div
-        class="exp-item"
-        style="
-          background:#f8fafc;
-          border-left:4px solid var(--accent2)
-        "
-      >
-
-        <h4>
-          Career Break &amp; Professional Upskilling
-          (Sep 2021 – Feb 2023)
-        </h4>
-
-        <div class="meta">
-          Professional Development • Data Analytics & Business Intelligence
-        </div>
-
-        <ul
-          style="
-            margin:8px 0 0 18px;
-            color:var(--muted)
-          "
-        >
-
-          <li>
-            Focused on professional upskilling in Data Analytics,
-            SQL, Advanced Excel and Business Intelligence.
-          </li>
-
-        </ul>
-
-      </div>
-
-
-      <!-- =====================================================
-           HDFC BANK
-      ====================================================== -->
-
-      <div class="exp-item">
-
-        <h4>
-          MIS Analyst — HDFC Bank
-          (Aug 2018 – Aug 2021)
-        </h4>
-
-        <div class="meta">
-          Hyderabad, India •
-          MIS Reporting, Data Validation & Management Reporting
-        </div>
-
-        <ul
-          style="
-            margin:8px 0 0 18px;
-            color:var(--muted)
-          "
-        >
-
-          <li>
-            Prepared and maintained daily, weekly and monthly MIS
-            reports for management and business teams.
-          </li>
-
-          <li>
-            Consolidated data from multiple sources and performed
-            data validation, reconciliation and quality checks.
-          </li>
-
-          <li>
-            Developed and maintained Excel-based reports, dashboards,
-            trackers and performance summaries.
-          </li>
-
-          <li>
-            Automated recurring MIS reports using Advanced Excel,
-            reducing manual effort and improving report turnaround time.
-          </li>
-
-          <li>
-            Prepared presentation-ready summaries and insights for
-            review by senior management.
-          </li>
-
-        </ul>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================================================
-       EDUCATION
-  ========================================================== -->
-
-  <section
-    class="card"
-    style="margin-top:18px"
-    aria-labelledby="edu-title"
-  >
-
-    <h2
-      id="edu-title"
-      class="section-title"
-    >
-      Education
-    </h2>
-
-    <div
-      style="
-        display:flex;
-        flex-direction:column;
-        gap:16px
-      "
-    >
-
-
-      <!-- IIIT-B -->
-
-      <div>
-
-        <div
-          style="
-            font-weight:700;
-            color:var(--primary);
-            font-size:1.05rem
-          "
-        >
-          International Institute of Information Technology Bangalore
-          (IIIT-B)
-        </div>
-
-        <div class="meta">
-          May 2024 – Jun 2025 • GPA: 3.64/4
-        </div>
-
-        <div
-          style="
-            color:var(--muted);
-            font-size:0.95rem
-          "
-        >
-
-          Postgraduation Programme in Data Science & Artificial Intelligence
-
-          <br>
-
-          Data Analytics, SQL, Machine Learning,
-          Business Intelligence
-
-        </div>
-
-      </div>
-
-
-      <hr
-        style="
-          border:0;
-          border-top:1px solid rgba(0,0,0,0.06);
-          margin:0
-        "
-      >
-
-
-      <!-- MBA -->
-
-      <div>
-
-        <div
-          style="
-            font-weight:700;
-            color:var(--primary);
-            font-size:1.05rem
-          "
-        >
-          Master of Business Administration (MBA) in Finance
-          — Osmania University
-        </div>
-
-        <div class="meta">
-          Aug 2016 – Jun 2018
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================================================
-       DASHBOARDS
-  ========================================================== -->
-
-  <section
-    id="dashboard"
-    style="margin-top:18px"
-  >
-
-    <h2 class="section-title">
-      Interactive Dashboards
-    </h2>
-
-    <div
-      style="
-        display:grid;
-        gap:18px
-      "
-    >
-
-
-      <!-- EXCEL DASHBOARD -->
-
-      <div class="dashboard-card">
-
-        <h3
-          style="
-            margin:0 0 8px;
-            color:var(--primary)
-          "
-        >
-          Dashboard 1 — Interactive Excel
-        </h3>
-
-        <p
-          class="small-muted"
-          style="margin:0 0 12px"
-        >
-          Interactive Excel dashboard — slicers and controls enabled
-          for live exploration.
-        </p>
-
-        <div class="dashboard-container">
-
-          <iframe
-            class="dashboard-embed"
-            src="https://1drv.ms/x/c/1c756098e6e55f1b/IQQfhbklUTPGRrunuCNA7kllAb3CwquwqmKfy6ELWuVw5PE?em=2&AllowTyping=True&ActiveCell='Dashboard'!B11&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True&edaebf=rslc0"
-            frameborder="0"
-            scrolling="no"
-            title="Interactive Excel Dashboard — Drupad Kumar"
-          >
-          </iframe>
-
-          <div class="download-row">
-
-            <a
-              class="btn"
-              href="Drupadkumar_Resume.pdf"
-              download
-            >
-              Download Resume
-            </a>
-
-            <a
-              class="btn secondary"
-              href="https://1drv.ms/x/c/1c756098e6e55f1b/IQQfhbklUTPGRrunuCNA7kllAb3CwquwqmKfy6ELWuVw5PE"
-              target="_blank"
-              rel="noopener"
-            >
-              Open Full Excel File
-            </a>
-
+        <div class="panel">
+          <div class="eyebrow">Target organisations</div>
+          <h3>Employers of interest</h3>
+          <p class="target-copy">These are target organisations, not a representation of previous employment or endorsement.</p>
+          <div class="employer-list" aria-label="Target employers">
+            <span class="employer">Standard Bank</span><span class="employer">FNB</span>
+            <span class="employer">Absa</span><span class="employer">Nedbank</span>
+            <span class="employer">Capitec</span><span class="employer">Discovery</span>
+            <span class="employer">Sanlam</span><span class="employer">Old Mutual</span>
+            <span class="employer">Momentum</span><span class="employer">Santam</span>
+            <span class="employer">Hollard</span>
           </div>
-
         </div>
-
       </div>
+    </section>
 
+    <section id="projects">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Featured work</div>
+          <h2>Independent analytics projects</h2>
+          <p>Business-focused case studies showing how I approach data preparation, analysis, dashboard development and recommendations.</p>
+        </div>
+        <div class="project-grid">
+          <article class="project">
+            <div class="project-number">01</div>
+            <h3>Sales & Business Performance Analysis</h3>
+            <p><strong>Business question:</strong> How are sales performing across products, regions and time periods, and where are the key gaps?</p>
+            <p>Use SQL and Excel to prepare and validate data, analyse KPIs and variances, and present trends in Power BI for performance monitoring and decision support.</p>
+            <div class="tools">SQL · Excel · Power BI · KPI analysis</div>
+          </article>
+          <article class="project">
+            <div class="project-number">02</div>
+            <h3>Customer Analytics & Segmentation</h3>
+            <p><strong>Business question:</strong> Which customer segments contribute to revenue, and what behavioural patterns should be explored?</p>
+            <p>Apply data transformation, exploratory analysis, segmentation and revenue contribution analysis to organise customer insights for targeted analysis.</p>
+            <div class="tools">SQL · Excel · Power BI · Segmentation</div>
+          </article>
+          <article class="project">
+            <div class="project-number">03</div>
+            <h3>Operational Performance Analysis</h3>
+            <p><strong>Business question:</strong> Where are productivity, workload or target-achievement gaps occurring?</p>
+            <p>Analyse operational KPIs, trends and variances, then present performance patterns to help stakeholders investigate deviations and bottlenecks.</p>
+            <div class="tools">SQL · Excel · Power BI · Root-cause analysis</div>
+          </article>
+        </div>
+        <div class="project-note"><strong>Project authenticity:</strong> The projects and dashboards showcased here are independently developed for portfolio and skills-demonstration purposes. They are separate from confidential employer or client work. Dataset sources and project-specific details should be documented alongside each project.</div>
+      </div>
+    </section>
 
-      <!-- POWER BI DASHBOARD -->
+    <section class="alt" id="dashboards">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Explore the work</div>
+          <h2>Dashboard previews</h2>
+          <p>Open the available workbook or report to explore the work in more detail.</p>
+        </div>
+        <div class="dashboards">
+          <article class="dashboard-card">
+            <h3>Interactive Excel Dashboard</h3>
+            <p>Excel dashboard with interactive slicers and controls for exploring the underlying report.</p>
+            <a class="small-link" href="https://1drv.ms/x/c/1c756098e6e55f1b/IQQfhbklUTPGRrunuCNA7kllAb3CwquwqmKfy6ELWuVw5PE?ActiveCell=%27Dashboard%27%21B11&AllowTyping=True&edaebf=rslc0&em=2&wdDownloadButton=True&wdHideGridlines=True&wdHideHeaders=True&wdInConfigurator=True" target="_blank" rel="noopener">Open Excel dashboard ↗</a>
+          </article>
+          <article class="dashboard-card">
+            <h3>Power BI Report</h3>
+            <p>Exported Power BI report shared as a PDF for portfolio viewing.</p>
+            <a class="small-link" href="https://1drv.ms/b/c/1c756098e6e55f1b/IQSYxQeOSlctQYiCRB9hz6g5ASfVtjpVPt0nSWTky7hnwEQ" target="_blank" rel="noopener">View Power BI report ↗</a>
+          </article>
+        </div>
+      </div>
+    </section>
 
-      <div class="dashboard-card">
+    <section id="skills">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Skills & expertise</div>
+          <h2>One clear, grouped skills list</h2>
+          <p>Relevant tools, analytical methods and business domains, organised for quick recruiter review.</p>
+        </div>
+        <div class="two-col">
+          <article class="panel">
+            <h3>Tools</h3>
+            <div class="tag-list">
+              <span class="tag">SQL</span><span class="tag">MySQL</span><span class="tag">PostgreSQL</span>
+              <span class="tag">Power BI</span><span class="tag">DAX</span><span class="tag">Power Query</span>
+              <span class="tag">Advanced Excel</span><span class="tag">Python</span><span class="tag">Pandas</span>
+              <span class="tag">NumPy</span><span class="tag">Tableau</span><span class="tag">Oracle Hyperion Planning</span>
+              <span class="tag">Hyperion Financial Reporting</span>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>Methods</h3>
+            <div class="tag-list">
+              <span class="tag">Data cleaning & validation</span><span class="tag">Data reconciliation</span>
+              <span class="tag">Exploratory data analysis</span><span class="tag">KPI development</span>
+              <span class="tag">Dashboard development</span><span class="tag">Data modelling</span>
+              <span class="tag">Trend & variance analysis</span><span class="tag">Root-cause analysis</span>
+              <span class="tag">Customer segmentation</span><span class="tag">Reporting workflows</span>
+              <span class="tag">Requirements gathering</span><span class="tag">Stakeholder reporting</span>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>Domains</h3>
+            <div class="tag-list">
+              <span class="tag">Banking</span><span class="tag">Insurance</span><span class="tag">Financial services</span>
+              <span class="tag">Financial reporting</span><span class="tag">MIS reporting</span>
+              <span class="tag">Management reporting</span><span class="tag">Sales performance</span>
+              <span class="tag">Operational analytics</span><span class="tag">Customer analytics</span>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>Certifications</h3>
+            <ul>
+              <li>Google Data Analytics Professional Certificate — Aug 2025</li>
+              <li>SQL Certificate — HackerRank — Jun 2025</li>
+              <li>Python Certificate — HackerRank — May 2025</li>
+              <li>Deloitte Data Analytics & Visualization Job Simulation — Forage — Mar 2025</li>
+              <li>Generative AI — UpGrad in collaboration with Microsoft — May 2025</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        <h3
-          style="
-            margin:0 0 8px;
-            color:var(--primary)
-          "
-        >
-          Dashboard 2 — Power BI
-        </h3>
+    <section class="alt" id="experience">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Career background</div>
+          <h2>Professional experience</h2>
+          <p>Experience spanning reporting, business intelligence, finance and operational analysis.</p>
+        </div>
+        <div class="timeline">
+          <article class="role">
+            <div class="role-top"><h3>Data Analyst · Vision2Vision</h3><span class="date">Aug 2026 – Present</span></div>
+            <div class="place">Johannesburg, South Africa · MIS reporting, business analytics and Power BI</div>
+            <ul><li>Deliver recurring MIS reports covering business, financial and operational performance.</li><li>Track KPIs, revenue, targets and variances to highlight trends and gaps.</li><li>Validate data from multiple sources and reconcile management reporting.</li></ul>
+          </article>
+          <article class="role">
+            <div class="role-top"><h3>Data Analyst · Zynlogic Technologies</h3><span class="date">Jun 2025 – Jul 2026</span></div>
+            <div class="place">Hyderabad, India · Business analytics, Power BI, SQL and Python</div>
+            <ul><li>Developed Power BI dashboards, DAX measures and management reports.</li><li>Cleaned and validated multi-source data, analysed trends and performance gaps, and presented findings to stakeholders.</li><li>Used Excel for reconciliation and ad-hoc analysis, and Python/Pandas for missing-value and duplicate checks.</li></ul>
+          </article>
+          <article class="role">
+            <div class="role-top"><h3>BI Analyst · ICICI Prudential</h3><span class="date">Jul 2024 – Jun 2025</span></div>
+            <div class="place">Hyderabad, India · Insurance, business intelligence and reporting</div>
+            <ul><li>Developed interactive Power BI dashboards for business and operational KPIs.</li><li>Transformed and modelled multi-source data, built DAX measures and reconciled reporting across source systems, Excel and Power BI.</li><li>Converted existing Excel/MIS reporting into interactive dashboards to improve reporting workflows.</li></ul>
+          </article>
+          <article class="role">
+            <div class="role-top"><h3>Reporting Analyst · Eashan F&B</h3><span class="date">Feb 2023 – Jul 2024</span></div>
+            <div class="place">Hyderabad, India · Finance, reporting and operations</div>
+            <ul><li>Prepared recurring and ad-hoc finance and MIS reports for business performance, KPIs and productivity.</li><li>Supported Oracle Hyperion Planning data loads and validation, and generated Hyperion Financial Reporting outputs.</li><li>Performed data cleaning, reconciliation and root-cause analysis to support planning and performance monitoring.</li></ul>
+          </article>
+          <article class="role">
+            <div class="role-top"><h3>Career Break & Professional Upskilling</h3><span class="date">Sep 2021 – Feb 2023</span></div>
+            <div class="place">Professional development in Data Analytics, SQL, Advanced Excel and Business Intelligence.</div>
+          </article>
+          <article class="role">
+            <div class="role-top"><h3>MIS Analyst · HDFC Bank</h3><span class="date">Aug 2018 – Aug 2021</span></div>
+            <div class="place">Hyderabad, India · MIS and management reporting</div>
+            <ul><li>Prepared daily, weekly and monthly MIS reports for management and business teams.</li><li>Consolidated multi-source data and performed validation, reconciliation and quality checks.</li><li>Maintained Excel reports and trackers and improved recurring reporting workflows.</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        <p
-          class="small-muted"
-          style="margin:0 0 12px"
-        >
-          Exported Power BI report embedded as PDF for portfolio viewing.
-        </p>
+    <section id="education">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Education</div>
+          <h2>Education & professional development</h2>
+        </div>
+        <div class="edu-grid">
+          <article class="edu-card">
+            <h3>Postgraduate Programme in Data Science & Artificial Intelligence</h3>
+            <p>International Institute of Information Technology Bangalore (IIIT-B)<br>May 2024 – Jun 2025 · GPA 3.64/4</p>
+          </article>
+          <article class="edu-card">
+            <h3>Master of Business Administration — Finance</h3>
+            <p>Osmania University<br>Aug 2016 – Jun 2018</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        <div class="dashboard-container">
-
-          <iframe
-            class="dashboard-embed"
-            src="https://1drv.ms/b/c/1c756098e6e55f1b/IQSYxQeOSlctQYiCRB9hz6g5ASfVtjpVPt0nSWTky7hnwEQ"
-            frameborder="0"
-            scrolling="no"
-            title="Power BI Report — Drupad Kumar"
-          >
-          </iframe>
-
-          <div
-            class="download-row"
-            style="margin-top:10px"
-          >
-
-            <a
-              class="btn"
-              href="Drupadkumar_Resume.pdf"
-              download
-            >
-              Download Resume
-            </a>
-
-            <a
-              class="btn secondary"
-              href="https://github.com/Drupadkumar"
-              target="_blank"
-              rel="noopener"
-            >
-              View Code
-            </a>
-
+    <section class="alt" id="contact">
+      <div class="container">
+        <div class="contact-box">
+          <div>
+            <div class="eyebrow" style="color:#78e0d2">Contact</div>
+            <h2>Let’s discuss Data Analyst opportunities</h2>
+            <p>Johannesburg, South Africa · Valid South African Critical Skills Work Visa · Available to discuss opportunities now.</p>
+            <div class="contact-links">
+              <a href="mailto:drupadkumar45@gmail.com">drupadkumar45@gmail.com</a>
+              <a href="https://www.linkedin.com/in/drupadkumar" target="_blank" rel="noopener">LinkedIn profile ↗</a>
+              <a href="https://github.com/Drupadkumar" target="_blank" rel="noopener">GitHub ↗</a>
+            </div>
           </div>
-
+          <a class="btn btn-primary" href="mailto:drupadkumar45@gmail.com?subject=Data%20Analyst%20Opportunity">Email me ↗</a>
         </div>
-
       </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================================================
-       CONTACT
-  ========================================================== -->
-
-  <section
-    id="contact"
-    class="card"
-    style="margin-top:18px"
-  >
-
-    <h2 class="section-title">
-      Contact & Hire
-    </h2>
-
-    <p style="color:var(--muted)">
-
-      I'm actively seeking
-
-      <strong>Data Analyst</strong>
-      and
-      <strong>Business Intelligence / BI Analyst</strong>
-      roles.
-
-      Currently based in
-
-      <strong>Johannesburg, South Africa</strong>
-
-      and available for relevant opportunities.
-
-    </p>
-
-
-    <div
-      style="
-        display:flex;
-        gap:12px;
-        flex-wrap:wrap;
-        margin-top:12px
-      "
-    >
-
-      <a
-        class="btn"
-        href="mailto:drupadkumar45@gmail.com"
-      >
-        Email: drupadkumar45@gmail.com
-      </a>
-
-      <a
-        class="btn secondary"
-        href="tel:+27723648584"
-      >
-        Call: +27 72364 8584
-      </a>
-
-      <a
-        class="btn secondary"
-        href="Drupadkumar_Resume.pdf"
-        download
-      >
-        Download Resume (PDF)
-      </a>
-
-    </div>
-
-
-    <div
-      style="
-        margin-top:12px;
-        color:var(--muted)
-      "
-    >
-
-      LinkedIn:
-
-      <a
-        href="https://linkedin.com/in/drupadkumar"
-        target="_blank"
-        rel="noopener"
-      >
-        linkedin.com/in/drupadkumar
-      </a>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================================================
-       FOOTER
-  ========================================================== -->
+    </section>
+  </main>
 
   <footer>
-
-    © Drupad Kumar —
-    Data Analyst • BI Analyst •
-    Business Intelligence •
-    Built for hiring managers •
-
-    Last updated: September 2026
-
+    <div class="container">
+      <span>© <span id="year"></span> Drupad Kumar · Data Analyst / BI Analyst</span>
+      <span>Built for recruiters and hiring managers</span>
+    </div>
   </footer>
-
-</div>
-
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
+'''
+
+readme = r'''# Drupad Kumar — Portfolio update
+
+This is a responsive, static HTML/CSS/JavaScript portfolio draft tailored to Data Analyst / BI Analyst opportunities in South Africa.
+
+## Files
+- `index.html` — complete portfolio page; CSS and small JavaScript enhancement are included inline.
+- `README.md` — deployment notes.
+
+## Before publishing
+1. Back up the current GitHub Pages repository.
+2. Replace the repository's root `index.html` with this file.
+3. Ensure `Drupadkumar_Resume.pdf` exists at the repository root; the resume button links to that filename.
+4. Check the two OneDrive dashboard links and LinkedIn/GitHub links from a private browser window.
+5. Verify dates, job titles, visa wording and every project description against your current CV.
+6. Publish to the branch configured for GitHub Pages.
+
+## Important notes
+- The site does not display a phone number in the page itself.
+- The resume PDF linked by the page may still include your phone number. If you want to reduce public exposure, prepare a public CV version with phone number removed and replace the linked PDF.
+- The work authorisation text is exactly: “Valid South African Critical Skills Work Visa.”
+- No dashboard count, report-automation count or time-saving figure is claimed.
+- The three case studies are described as independent portfolio projects. Add dataset-source details and actual screenshots/results before presenting any particular finding as a measured result.
+- The target employer names are presented as organisations of interest, not as previous employers or endorsements.
+- The page is a generated replacement draft, not a direct edit to the live GitHub repository.
+'''
+
+(out / "index.html").write_text(html, encoding="utf-8")
+(out / "README.md").write_text(readme, encoding="utf-8")
+
+zip_path = Path("/mnt/data/drupad_portfolio_update.zip")
+with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as z:
+    z.write(out / "index.html", arcname="drupad_portfolio_update/index.html")
+    z.write(out / "README.md", arcname="drupad_portfolio_update/README.md")
+
+print("Created portfolio code package:")
+print(f"- {out / 'index.html'} ({(out / 'index.html').stat().st_size:,} bytes)")
+print(f"- {out / 'README.md'} ({(out / 'README.md').stat().st_size:,} bytes)")
+print(f"- {zip_path} ({zip_path.stat().st_size:,} bytes)")
